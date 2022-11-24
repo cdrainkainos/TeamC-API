@@ -1,8 +1,5 @@
-
+CREATE DATABASE IF NOT EXISTS AgileSprints_SamB;
 USE  AgileSprints_SamB;
-DROP TABLE Employees;
-DROP TABLE Job_Roles;
-
 
 CREATE TABLE if not exists capability(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,

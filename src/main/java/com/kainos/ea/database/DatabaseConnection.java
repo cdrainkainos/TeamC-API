@@ -13,7 +13,7 @@ import java.util.Properties;
 public class DatabaseConnection {
     private static Connection conn;
 
-    public static Connection getConnection() throws SQLException, DatabaseConnectionException, IOException {
+    public Connection getConnection() throws SQLException, DatabaseConnectionException, IOException {
 
         if (conn != null) {
             return conn;
@@ -39,7 +39,7 @@ public class DatabaseConnection {
         }
 
     }
-    public static void closeConnection() throws DatabaseConnectionException {
+    public void closeConnection() throws DatabaseConnectionException {
         try {
             if (conn != null) {
                 conn.close();

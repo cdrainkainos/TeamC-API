@@ -1,5 +1,8 @@
 package com.kainos.ea.database;
 
+import com.kainos.ea.exception.DatabaseConnectionException;
+import org.eclipse.jetty.util.IO;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,7 +13,7 @@ import java.util.Properties;
 public class DatabaseConnection {
     private static Connection conn;
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException, DatabaseConnectionException, IOException {
 
         if (conn != null) {
             return conn;
@@ -31,21 +34,20 @@ public class DatabaseConnection {
             return conn;
 
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
-            closeConnection();
+            throw new IOException();
+
         }
 
-        return null;
     }
-    public static void closeConnection()  {
+    public static void closeConnection() throws DatabaseConnectionException {
         try{
             if (conn != null) {
                 conn.close();
                 conn = null;
             }
         }catch (SQLException e ){
-            e.printStackTrace();
-            // do something
+            throw new DatabaseConnectionException(e);
+
         }
     }
 }

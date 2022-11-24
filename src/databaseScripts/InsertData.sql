@@ -37,3 +37,4 @@ INSERT INTO trainings(training_name, is_obligatory)
 	("Wellbeing Guides", 0),
 	("Unconscious Bias", 0),
 	("Workday - Bitesize 101", 0);
+	

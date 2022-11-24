@@ -6,13 +6,13 @@ DROP TABLE Job_Roles;
 
 CREATE TABLE if not exists capability(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	capability_name VARCHAR(15)
+	capability_name VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE if not exists band(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    band_level TINYINT,
-    band_name VARCHAR(20)
+    band_level TINYINT NOT NULL,
+    band_name VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE if not exists job_role(

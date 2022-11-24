@@ -40,12 +40,12 @@ public class DatabaseConnection {
 
     }
     public static void closeConnection() throws DatabaseConnectionException {
-        try{
+        try {
             if (conn != null) {
                 conn.close();
                 conn = null;
             }
-        }catch (SQLException e ){
+        } catch (SQLException e ){
             throw new DatabaseConnectionException(e);
 
         }

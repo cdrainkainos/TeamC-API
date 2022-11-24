@@ -45,7 +45,7 @@ public class DatabaseConnection {
                 conn.close();
                 conn = null;
             }
-        } catch (SQLException e ){
+        } catch (SQLException e ) {
             throw new DatabaseConnectionException(e);
 
         }

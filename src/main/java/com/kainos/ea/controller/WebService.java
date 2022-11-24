@@ -24,10 +24,8 @@ public class WebService {
         rolesService = new RolesService(rolesDao, databaseConnector);
     }
 
-    //End point to get a list of all job roles. us001
     @GET
     @Path("/job-roles")
-    //@Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJobRoles()
     {

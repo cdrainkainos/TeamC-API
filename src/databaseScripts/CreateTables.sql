@@ -1,18 +1,18 @@
 CREATE DATABASE IF NOT EXISTS AgileSprints_SamB;
 USE  AgileSprints_SamB;
 
-CREATE TABLE if not exists capability(
+CREATE TABLE IF NOT EXISTS capability(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	capability_name VARCHAR(15) NOT NULL
 );
 
-CREATE TABLE if not exists band(
+CREATE TABLE IF NOT EXISTS band(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_level TINYINT NOT NULL,
     band_name VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE if not exists job_role(
+CREATE TABLE IF NOT EXISTS job_role(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
     capability_id TINYINT,
@@ -27,13 +27,13 @@ CREATE TABLE if not exists job_role(
 );
 
 
-CREATE TABLE if not exists training(
+CREATE TABLE IF NOT EXISTS training(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     training_name VARCHAR(80),
     is_mandatory BIT
 );
 
-CREATE TABLE if not exists employee(
+CREATE TABLE IF NOT EXISTS employee(
 	id smallint NOT NULL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -43,7 +43,7 @@ CREATE TABLE if not exists employee(
 	gender CHAR(1)
 );
 
-CREATE TABLE if not exists training_employee(
+CREATE TABLE IF NOT EXISTS training_employee(
 	id SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     training_id TINYINT,
     employee_id SMALLINT,
@@ -53,7 +53,7 @@ CREATE TABLE if not exists training_employee(
 		REFERENCES employee(id)
 );
 
-CREATE TABLE if not exists employees_fact(
+CREATE TABLE IF NOT EXISTS employees_fact(
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	employee_id SMALLINT,
 	job_role_id TINYINT,

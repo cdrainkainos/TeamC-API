@@ -29,7 +29,7 @@ public class DatabaseConnection {
                 final String host            = props.getProperty("host");
                 final String db              = props.getProperty("db");
 
-                if (user == null || password == null || host == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
+                if (user == null || password == null || host == null || db == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
 
                 conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db + "?useSSL=false", user, password);
                 return conn;

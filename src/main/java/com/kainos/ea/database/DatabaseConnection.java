@@ -18,26 +18,30 @@ public class DatabaseConnection {
         if (conn != null) {
             return conn;
         }
+        else {
+            try {
+                FileInputStream propsStream = new FileInputStream("employeedb.properties");
+                Properties props = new Properties();
+                props.load(propsStream);
 
-        try {
-            FileInputStream propsStream = new FileInputStream("employeedb.properties");
-            Properties props = new Properties();
-            props.load(propsStream);
+                final String user            = props.getProperty("user");
+                final String password        = props.getProperty("password");
+                final String host            = props.getProperty("host");
+                final String db              = props.getProperty("db");
 
-            final String user            = props.getProperty("user");
-            final String password        = props.getProperty("password");
-            final String host            = props.getProperty("host");
+                if (user == null || password == null || host == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
 
-            if (user == null || password == null || host == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
+                conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db + "?useSSL=false", user, password);
+                return conn;
 
-            conn = DriverManager.getConnection("jdbc:mysql://" + host + "/AgileSprints_SamB?useSSL=false", user, password);
-            return conn;
+            } catch (SQLException | IOException e) {
+                throw new IOException();
+            }
 
-        } catch (SQLException | IOException e) {
-            throw new IOException();
         }
 
     }
+
     public void closeConnection() throws DatabaseConnectionException {
         try {
             if (conn != null) {

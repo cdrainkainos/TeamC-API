@@ -19,17 +19,14 @@ public class RolesDao {
                     "SELECT id, Kainos_Job_Title "
                             + "FROM Job_Roles;");
 
-            List<JobRole> job_roles = new ArrayList<>();
+            List<JobRole> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                JobRole role = new JobRole(
-                        rs.getInt("id"),
-                        rs.getString("Kainos_Job_Title"));
-                job_roles.add(role);
+                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("Kainos_Job_Title")));
             }
-            return job_roles;
+            return jobRoles;
         } catch (SQLException e) {
-            throw new SQLException ("Select query for roles is incorrect");
+            throw new SQLException ("Error with sql statement");
         }
 
     }

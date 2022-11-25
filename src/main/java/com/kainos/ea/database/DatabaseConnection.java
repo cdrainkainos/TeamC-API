@@ -35,7 +35,6 @@ public class DatabaseConnection {
 
         } catch (SQLException | IOException e) {
             throw new IOException();
-
         }
 
     }

@@ -18,12 +18,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
 
-import javax.management.relation.Role;
-
-@ExtendWith(MockitoExtension.class)
-class EmployeeServiceTest {
+class RolesServiceTest {
 
     RolesDao rolesDao = Mockito.mock(RolesDao.class);
 
@@ -39,8 +35,19 @@ class EmployeeServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenReturn(role_list);
         List<JobRole> roles = rolesService.getAllRoles();
-        assertEquals(rolesService.getAllRoles(), role_list);
+        assertEquals(roles, role_list);
     }
+
+    @Test
+    void getAllRoles_shouldReturnException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.getAllRoles(conn)).thenThrow(SQLException.class);
+        assertThrows(SQLException.class, () -> rolesService.getAllRoles());
+    }
+
+
+
+
 
 
 

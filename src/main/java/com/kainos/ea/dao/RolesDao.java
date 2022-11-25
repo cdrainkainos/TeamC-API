@@ -22,7 +22,7 @@ public class RolesDao {
             List<JobRole> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("Kainos_Job_Title")));
+                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("kainos_job_title")));
             }
             return jobRoles;
         } catch (SQLException e) {

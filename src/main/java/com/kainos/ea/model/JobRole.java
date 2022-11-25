@@ -11,7 +11,7 @@ public class JobRole {
     @JsonCreator
     public JobRole(
             @JsonProperty("id") int id,
-            @JsonProperty("Kainos_Job_Title") String role_title) {
+            @JsonProperty("kainos_job_title") String role_title) {
         this.setRoleID(id);
         this.setRole_title(role_title);
     }

@@ -45,19 +45,4 @@ class RolesServiceTest {
         assertThrows(SQLException.class, () -> rolesService.getAllRoles());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

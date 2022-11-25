@@ -39,7 +39,7 @@ class RolesServiceTest {
     }
 
     @Test
-    void getAllRoles_shouldReturnException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
+    void getAllRoles_shouldThrowException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> rolesService.getAllRoles());

@@ -16,8 +16,8 @@ public class RolesDao {
         try {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery(
-                    "SELECT id, Kainos_Job_Title "
-                            + "FROM Job_Roles;");
+                    "SELECT id, kainos_job_title "
+                            + "FROM job_role;");
 
             List<JobRole> jobRoles = new ArrayList<>();
 

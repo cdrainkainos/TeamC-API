@@ -52,7 +52,6 @@ CREATE TABLE IF NOT EXISTS training_employee(
 		REFERENCES employee(id)
 );
 
-
 CREATE TABLE IF NOT EXISTS employee_fact(
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	employee_id SMALLINT,

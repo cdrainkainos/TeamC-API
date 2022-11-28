@@ -43,15 +43,17 @@ public class WebService {
     }
 
     @GET
-    @Path("/job-specification")
+    @Path("/job-specification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobSpecification()
+    public Response getJobSpecification(@PathParam("id") int role_id)
     {
         try {
-            return Response.status(HttpStatus.OK_200).entity(specificationsService.getAllSpecifications()).build();
+            return Response.status(HttpStatus.OK_200).entity(specificationsService.getAllSpecifications(role_id)).build();
         } catch (Exception | DatabaseConnectionException e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
 
     }
 }
+
+

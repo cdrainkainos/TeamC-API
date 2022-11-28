@@ -19,7 +19,7 @@ public class SpecificationsService {
 
     }
 
-    public List<JobSpecification> getAllSpecifications() throws SQLException, DatabaseConnectionException, IOException {
-        return specificationsDao.getAllSpecification(databaseConnector.getConnection());
+    public List<JobSpecification> getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException {
+        return specificationsDao.getAllSpecification(databaseConnector.getConnection(), role_id);
     }
 }

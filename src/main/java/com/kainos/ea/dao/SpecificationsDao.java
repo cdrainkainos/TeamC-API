@@ -15,13 +15,11 @@ public class SpecificationsDao {
     public SpecificationsDao() {
     }
 
-    public List<JobSpecification> getAllSpecification(Connection c) throws SQLException {
+    public List<JobSpecification> getAllSpecification(Connection c, int role_id) throws SQLException {
+
         try{
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery(
-                    "SELECT id, job_specification, job_spec_link "
-                            + "FROM job_role;");
-
+            ResultSet rs = st.executeQuery("SELECT id, job_specification, job_spec_link  FROM job_role Where id =" +role_id );
             List<JobSpecification> jobSpecifications = new ArrayList<>();
 
             while (rs.next()) {

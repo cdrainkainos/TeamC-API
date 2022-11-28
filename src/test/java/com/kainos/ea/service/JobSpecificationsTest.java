@@ -28,17 +28,19 @@ public class JobSpecificationsTest {
 
     @Test
     void getAllRoles_shouldReturnListOfSpecifications_whenDaoReturnsListOfSpecifications() throws SQLException, DatabaseConnectionException, IOException {
+       int role_id = 1;
         List<JobSpecification> specification_list = new ArrayList<>();
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(specificationsDao.getAllSpecification(conn)).thenReturn(specification_list);
-        List<JobSpecification> specifications = specificationsService.getAllSpecifications();
+        Mockito.when(specificationsDao.getAllSpecification(conn, role_id)).thenReturn(specification_list);
+        List<JobSpecification> specifications = specificationsService.getAllSpecifications(role_id);
         assertEquals(specifications, specification_list);
     }
 
     @Test
     void getAllSpecifications_shouldThrowException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
+        int role_id = 1;
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(specificationsDao.getAllSpecification(conn)).thenThrow(SQLException.class);
-        assertThrows(SQLException.class, () -> specificationsService.getAllSpecifications());
+        Mockito.when(specificationsDao.getAllSpecification(conn, role_id)).thenThrow(SQLException.class);
+        assertThrows(SQLException.class, () -> specificationsService.getAllSpecifications(role_id));
     }
 }

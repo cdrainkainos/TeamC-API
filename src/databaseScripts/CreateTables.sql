@@ -12,6 +12,23 @@ CREATE TABLE IF NOT EXISTS band(
     band_name VARCHAR(20) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS competency(
+	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    competency_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS competency_band(
+	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    band_id TINYINT,
+    competency_id TINYINT,
+    subheading VARCHAR(50),
+    competency_desc TEXT,
+    FOREIGN KEY(competency_id)
+		REFERENCES competency(id),
+	FOREIGN KEY(band_id)
+		REFERENCES band(id)
+);
+
 CREATE TABLE IF NOT EXISTS job_role(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,

@@ -16,13 +16,14 @@ public class RolesDao {
         try {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery(
-                    "SELECT id, kainos_job_title "
-                            + "FROM job_role;");
+                    "SELECT job_role.id, job_role.kainos_job_title, band.band_name " +
+                            "FROM job_role " +
+                            "JOIN band ON job_role.band_id=band.id;");
 
             List<JobRole> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("kainos_job_title")));
+                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("kainos_job_title"), rs.getString("band_name")));
             }
             return jobRoles;
         } catch (SQLException e) {

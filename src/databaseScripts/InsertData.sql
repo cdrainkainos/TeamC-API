@@ -14,7 +14,7 @@ INSERT INTO band(band_level, band_name)
 	(5, "Associate"),
 	(6, "Apprentice"),
 	(6, "Trainee");
-select * from band;
+
 INSERT INTO competency(competency_name) 
 	VALUES('Personal Performance'),
 	('Working with Others'),

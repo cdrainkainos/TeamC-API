@@ -1,5 +1,6 @@
 package com.kainos.ea.integration;
 
+import com.kainos.ea.model.JobSpecification;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
 import com.kainos.ea.model.JobRole;
@@ -25,6 +26,14 @@ public class WebServiceIntegrationTest {
     @Test
     void getEmployees_shouldReturnListOfEmployees() {
         List<JobRole> response = APP.client().target("http://localhost:8080/api/job-roles")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
+
+    @Test
+    void getSpecification_shouldReturnListOfSpecification() {
+        List<JobSpecification> response = APP.client().target("http://localhost:8080/api/job-specification")
                 .request()
                 .get(List.class);
         assertTrue(response.size() > 0);

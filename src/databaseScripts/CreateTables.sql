@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS competency(
 );
 
 CREATE TABLE IF NOT EXISTS competency_band(
-	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	id SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
     competency_id TINYINT,
-    subheading VARCHAR(50),
-    competency_desc TEXT,
+    subheading VARCHAR(150),
+    competency_desc VARCHAR(600),
     FOREIGN KEY(competency_id)
 		REFERENCES competency(id),
 	FOREIGN KEY(band_id)

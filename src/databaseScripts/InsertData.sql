@@ -1,4 +1,3 @@
-
 USE  AgileSprints_SamB;
 
 INSERT INTO capability(capability_name)
@@ -16,7 +15,7 @@ INSERT INTO band(band_level, band_name)
 	(6, "Apprentice"),
 	(6, "Trainee");
 
-INSERT INTO trainings(training_name, is_obligatory)
+INSERT INTO training(training_name, is_mandatory)
 	VALUES("GDPR & Handling Sensitive Data", 1),
 	("Inclusion, Diversity, Equality & Equity", 1),
 	("Life as a PLC", 1),
@@ -37,4 +36,4 @@ INSERT INTO trainings(training_name, is_obligatory)
 	("Wellbeing Guides", 0),
 	("Unconscious Bias", 0),
 	("Workday - Bitesize 101", 0);
-	
+

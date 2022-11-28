@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS job_role(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
     capability_id TINYINT,
-	kainos_job_title VARCHAR(30),
+	kainos_job_title VARCHAR(35),
 	job_family VARCHAR(50),
 	job_specification VARCHAR(255),
 	job_spec_link VARCHAR(150),
@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS job_role(
 	FOREIGN KEY(capability_id)
 		REFERENCES capability(id)
 );
-
 
 CREATE TABLE IF NOT EXISTS training(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -53,7 +52,7 @@ CREATE TABLE IF NOT EXISTS training_employee(
 		REFERENCES employee(id)
 );
 
-CREATE TABLE IF NOT EXISTS employees_fact(
+CREATE TABLE IF NOT EXISTS employee_fact(
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	employee_id SMALLINT,
 	job_role_id TINYINT,
@@ -62,7 +61,7 @@ CREATE TABLE IF NOT EXISTS employees_fact(
 	sick_leave_hours SMALLINT,
 	current_flag BIT,
 	rowgu_id VARCHAR(50),
-	salary DECIMAL(7,3),
+	salary DECIMAL(7,2),
 	location VARCHAR(15),
 	FOREIGN KEY(job_role_id)
 		REFERENCES job_role(id),

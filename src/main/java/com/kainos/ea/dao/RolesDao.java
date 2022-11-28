@@ -15,14 +15,18 @@ public class RolesDao {
     public List<JobRole> getAllRoles(Connection c) throws SQLException {
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery(
-                    "SELECT id, kainos_job_title "
-                            + "FROM job_role;");
+            ResultSet rs = st.executeQuery("select job_role.id, job_role.kainos_job_title, capability.capability_name\n" +
+                    "from job_role join capability\n" +
+                    "on (job_role.capability_id = capability.id);");
 
             List<JobRole> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                jobRoles.add(new JobRole(rs.getInt("id"), rs.getString("kainos_job_title")));
+                JobRole role = new JobRole(
+                        rs.getInt("id"),
+                        rs.getString("Kainos_Job_Title"),
+                        rs.getString("capability_name"));
+                jobRoles.add(role);
             }
             return jobRoles;
         } catch (SQLException e) {

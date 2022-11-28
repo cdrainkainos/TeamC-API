@@ -1,4 +1,3 @@
-
 USE  AgileSprints_SamB;
 
 INSERT INTO capability(capability_name)
@@ -37,3 +36,4 @@ INSERT INTO training(training_name, is_mandatory)
 	("Wellbeing Guides", 0),
 	("Unconscious Bias", 0),
 	("Workday - Bitesize 101", 0);
+

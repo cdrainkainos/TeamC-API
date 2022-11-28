@@ -15,6 +15,7 @@ INSERT INTO band(band_level, band_name)
 	(6, "Apprentice"),
 	(6, "Trainee");
 
+
 INSERT INTO training(training_name, is_mandatory)
 	VALUES("GDPR & Handling Sensitive Data", 1),
 	("Inclusion, Diversity, Equality & Equity", 1),

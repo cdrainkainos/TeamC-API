@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS AgileSprints_SamB;
 USE  AgileSprints_SamB;
 
@@ -53,6 +52,7 @@ CREATE TABLE IF NOT EXISTS training_employee(
 	FOREIGN KEY(employee_id)
 		REFERENCES employee(id)
 );
+
 
 CREATE TABLE IF NOT EXISTS employee_fact(
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,

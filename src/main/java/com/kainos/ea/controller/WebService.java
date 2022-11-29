@@ -47,7 +47,7 @@ public class WebService {
         } catch (Exception | DatabaseConnectionException  e){
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         } catch (JobRoleDoesNotExistException e){
-            return Response.status(HttpStatus.BAD_REQUEST_400, e.getMessage()).build();
+            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         }
     }
 

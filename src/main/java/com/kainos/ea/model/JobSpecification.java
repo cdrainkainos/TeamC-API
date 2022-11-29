@@ -5,26 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JobSpecification {
 
-    private int id;
+    private String kainosJobTitle;
     private String jobSpecification;
     private String jobSpecificationLink;
 
     @JsonCreator
     public JobSpecification(
-            @JsonProperty("id") int id,
+            @JsonProperty("kainos_job_title") String kainosJobTitle,
             @JsonProperty("job_specification") String jobSpecification,
             @JsonProperty("job_spec_link") String jobSpecificationLink) {
-        this.setId(id);
+        this.setKainosJobTitle(kainosJobTitle);
         this.setJobSpecification(jobSpecification);
         this.setJobSpecificationLink(jobSpecificationLink);
     }
 
-    public int getId() {
-        return id;
+    public String getKainosJobTitle() {
+        return kainosJobTitle;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setKainosJobTitle(String kainosJobTitle) {
+        this.kainosJobTitle = kainosJobTitle;
     }
 
     public String getJobSpecification() {

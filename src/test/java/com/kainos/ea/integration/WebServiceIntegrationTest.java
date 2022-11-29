@@ -26,7 +26,7 @@ public class WebServiceIntegrationTest {
     );
 
     @Test
-    void getJobRoles_shouldReturnListOfJobRoles_withValidValues_notNull() {
+    void getJobRoles_shouldReturnListOfJobRoles_withValidValues() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()

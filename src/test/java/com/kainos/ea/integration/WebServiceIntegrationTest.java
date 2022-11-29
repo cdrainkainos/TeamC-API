@@ -1,5 +1,8 @@
 package com.kainos.ea.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kainos.ea.model.JobSpecification;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
@@ -44,18 +47,20 @@ public class WebServiceIntegrationTest {
 
     @Test
     void getSpecificationById_shouldReturnResponseEqualToTestSpecification() {
-        JobSpecification jobSpecificationTest = new JobSpecification(
+        JobSpecification jTest = new JobSpecification(
                 "Principle Data Architect",
                 "As a Principal Data Architect in Kainos,  youll be accountable for successful delivery of data solutions across multiple customers",
-                "https://kainossoftwareltd.sharepoint.com/people/Job%20Specifications/Forms/AllItems.aspx?csf=1&web=1&e=iExkns&siteid=%7B7D710350%2D0135%2D457B%2DB601%2D6CED1D6C94AF%7D&webid=%7BAB4B0C68%2D5BFC%2D4CCD%2D94E2%2D294A4EDE9CEF%7D&uniqueid=%7BEF88E872%2D0790%2D4482%2DB9EE%2DD65121B7ED38%7D&FolderCTID=0x012000BBCDBD83EDBB3F4180056411A9CB934B&id=%2Fpeople%2FJob%20Specifications%2FData%2FJob%20profile%20%2D%20Principal%20Data%20Architect%20%28P%29%2Epdf&parent=%2Fpeople%2FJob%20Specifications%2FData"
-        );
-        List<JobSpecification> jobSpecificationResponse = APP.client().target("http://localhost:8080/api/job-specification/1" )
+                "https://kainossoftwareltd.sharepoint.com/people/Job%20Specifications/Forms/AllItems.aspx?csf=1&web=1&e=iExkns&siteid=%7B7D710350%2D0135%2D457B%2DB601%2D6CED1D6C94AF%7D&webid=%7BAB4B0C68%2D5BFC%2D4CCD%2D94E2%2D294A4EDE9CEF%7D&uniqueid=%7BEF88E872%2D0790%2D4482%2DB9EE%2DD65121B7ED38%7D&FolderCTID=0x012000BBCDBD83EDBB3F4180056411A9CB934B&id=%2Fpeople%2FJob%20Specifications%2FData%2FJob%20profile%20%2D%20Principal%20Data%20Architect%20%28P%29%2Epdf&parent=%2Fpeople%2FJob%20Specifications%2FData");
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode response = APP.client().target("http://localhost:8080/api/job-specification/1")
                 .request()
-                .get(List.class);
-
-        JobSpecification assertJobSpecification = jobSpecificationResponse.get(0);
-        Assertions.assertEquals(assertJobSpecification.getKainosJobTitle(), jobSpecificationTest.getKainosJobTitle());
-        Assertions.assertEquals(assertJobSpecification.getJobSpecification(), jobSpecificationTest.getJobSpecification());
-        Assertions.assertEquals(assertJobSpecification.getJobSpecificationLink(), jobSpecificationTest.getJobSpecificationLink());
+                .get(JsonNode.class);
+        List<JobSpecification> JobRoleList = mapper.convertValue(
+                response, new TypeReference<List<JobSpecification>>() {
+                }
+        );
+        Assertions.assertEquals(JobRoleList.get(0).getKainosJobTitle(), jTest.getKainosJobTitle());
+        Assertions.assertEquals(JobRoleList.get(0).getJobSpecification(), jTest.getJobSpecification());
+        Assertions.assertEquals(JobRoleList.get(0).getJobSpecificationLink(), jTest.getJobSpecificationLink());
     }
 }

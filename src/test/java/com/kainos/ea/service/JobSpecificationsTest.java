@@ -46,10 +46,10 @@ public class JobSpecificationsTest {
     }
 
     @Test
-    void getAllSpecifications_shouldThrowException_whenRecordIsEmpty() throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
+    void getAllSpecifications_shouldThrowUserDoesNotExistException_whenDaoReturnsNull() throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
         int role_id = -1;
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(SQLException.class);
-        assertThrows(SQLException.class, () -> rolesService.getAllSpecifications(role_id));
+        Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(RoleNotExistException.class);
+        assertThrows(RoleNotExistException.class, () -> rolesService.getAllSpecifications(role_id));
     }
 }

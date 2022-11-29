@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS band(
     band_level TINYINT NOT NULL,
     band_name VARCHAR(20) NOT NULL
 );
-select * from job_family;
+
 CREATE TABLE IF NOT EXISTS competency(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     competency_name VARCHAR(50)

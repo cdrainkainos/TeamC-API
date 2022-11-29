@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS competency_band(
 		REFERENCES band(id)
 );
 
-CREATE TABLE job_family(
+CREATE TABLE IF NOT EXISTS job_family(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     capability_id TINYINT,
     job_family VARCHAR(50),

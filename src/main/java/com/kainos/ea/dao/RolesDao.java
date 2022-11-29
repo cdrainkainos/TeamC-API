@@ -1,6 +1,8 @@
 package com.kainos.ea.dao;
 
 import com.kainos.ea.model.JobRole;
+import com.kainos.ea.model.JobRoleXL;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,4 +32,27 @@ public class RolesDao {
         }
 
     }
+
+    public JobRoleXL getRoleById(int roleID, Connection c) throws SQLException {
+
+        String query = String.format("SELECT band_id, job_family_id, kainos_job_title, job_specification, job_spec_link" +
+                " FROM job_role WHERE id = %d", roleID);
+        Statement st = c.createStatement();
+        ResultSet resultSet = st.executeQuery(query);
+
+        if (resultSet.next()){
+            JobRoleXL jobRoleXL = new JobRoleXL(
+                    roleID,
+                    resultSet.getInt("band_id"),
+                    resultSet.getInt("job_family_id"),
+                    resultSet.getString("kainos_job_title"),
+                    resultSet.getString("job_specification"),
+                    resultSet.getString("job_spec_link")
+            );
+            return jobRoleXL;
+        }
+        return null;
+    }
+
+
 }

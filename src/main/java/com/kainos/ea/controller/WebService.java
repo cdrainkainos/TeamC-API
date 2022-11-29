@@ -3,6 +3,7 @@ package com.kainos.ea.controller;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
+import com.kainos.ea.exception.JobRoleDoesNotExistException;
 import com.kainos.ea.service.RolesService;
 import io.swagger.annotations.*;
 import org.eclipse.jetty.http.HttpStatus;
@@ -40,8 +41,14 @@ public class WebService {
     @GET
     @Path("/job-roles/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobRoleById(String id){
-        return Response.status()
+    public Response getJobRoleById(@PathParam("id") int id){
+        try {
+            return Response.status(HttpStatus.OK_200).entity(rolesService.getRoleById(id)).build();
+        } catch (Exception | DatabaseConnectionException  e){
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
+        } catch (JobRoleDoesNotExistException e){
+            return Response.status(HttpStatus.BAD_REQUEST_400, e.getMessage()).build();
+        }
     }
 
 }

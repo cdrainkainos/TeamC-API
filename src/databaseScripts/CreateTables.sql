@@ -29,18 +29,25 @@ CREATE TABLE IF NOT EXISTS competency_band(
 		REFERENCES band(id)
 );
 
+CREATE TABLE job_family(
+	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    capability_id TINYINT,
+    job_family VARCHAR(50),
+	FOREIGN KEY(capability_id)
+		REFERENCES capability(id)
+);
+
 CREATE TABLE IF NOT EXISTS job_role(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
-    capability_id TINYINT,
+    job_family_id TINYINT,
 	kainos_job_title VARCHAR(35),
-	job_family VARCHAR(50),
 	job_specification VARCHAR(255),
-	job_spec_link VARCHAR(150),
+	job_spec_link VARCHAR(500),
     FOREIGN KEY(band_id)
 		REFERENCES band(id),
-	FOREIGN KEY(capability_id)
-		REFERENCES capability(id)
+	FOREIGN KEY(job_family_id)
+		REFERENCES job_family(id)
 );
 
 CREATE TABLE IF NOT EXISTS training(

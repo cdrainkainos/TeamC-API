@@ -16,8 +16,10 @@ public class RolesDao {
         try {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT job_role.id, job_role.kainos_job_title, capability.capability_name\n" +
-                    "FROM job_role join capability\n" +
-                    "ON (job_role.capability_id = capability.id);");
+                    "FROM job_role JOIN job_family\n" +
+                    "ON (job_role.job_family_id = job_family.id)\n" +
+                    "JOIN capability " +
+                    "ON (job_family.capability_id = capability.id);");
 
             List<JobRole> jobRoles = new ArrayList<>();
 

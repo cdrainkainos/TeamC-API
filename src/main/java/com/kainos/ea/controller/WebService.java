@@ -11,7 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Api("Engineering Academy Dropwizard API")
+@Api("Team C Sprint")
 @Path("/api")
 
 public class WebService {

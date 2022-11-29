@@ -37,4 +37,11 @@ public class WebService {
 
     }
 
+    @GET
+    @Path("/job-roles/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJobRoleById(String id){
+        return Response.status()
+    }
+
 }

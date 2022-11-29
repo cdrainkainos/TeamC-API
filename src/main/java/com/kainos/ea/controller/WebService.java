@@ -4,6 +4,7 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.dao.SpecificationsDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
+import com.kainos.ea.exception.EmptyListException;
 import com.kainos.ea.service.RolesService;
 import com.kainos.ea.service.SpecificationsService;
 import io.swagger.annotations.*;
@@ -49,11 +50,10 @@ public class WebService {
     {
         try {
             return Response.status(HttpStatus.OK_200).entity(specificationsService.getAllSpecifications(role_id)).build();
-        } catch (Exception | DatabaseConnectionException e) {
+        } catch (EmptyListException e){
+            return Response.status(HttpStatus.NO_CONTENT_204, e.getMessage()).build();
+        } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
-
     }
 }
-
-

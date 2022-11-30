@@ -12,20 +12,43 @@ CREATE TABLE IF NOT EXISTS band(
     band_name VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS job_role(
+CREATE TABLE IF NOT EXISTS competency(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    competency_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS competency_band(
+	id SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
+    competency_id TINYINT,
+    subheading VARCHAR(150),
+    competency_desc VARCHAR(600),
+    FOREIGN KEY(competency_id)
+		REFERENCES competency(id),
+	FOREIGN KEY(band_id)
+		REFERENCES band(id)
+);
+
+CREATE TABLE IF NOT EXISTS job_family(
+	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     capability_id TINYINT,
-	kainos_job_title VARCHAR(30),
-	job_family VARCHAR(50),
-	job_specification VARCHAR(255),
-	job_spec_link VARCHAR(150),
-    FOREIGN KEY(band_id)
-		REFERENCES band(id),
+    job_family VARCHAR(50),
 	FOREIGN KEY(capability_id)
 		REFERENCES capability(id)
 );
 
+CREATE TABLE IF NOT EXISTS job_role(
+	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    band_id TINYINT,
+    job_family_id TINYINT,
+	kainos_job_title VARCHAR(35),
+	job_specification VARCHAR(255),
+	job_spec_link VARCHAR(500),
+    FOREIGN KEY(band_id)
+		REFERENCES band(id),
+	FOREIGN KEY(job_family_id)
+		REFERENCES job_family(id)
+);
 
 CREATE TABLE IF NOT EXISTS training(
 	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -53,7 +76,7 @@ CREATE TABLE IF NOT EXISTS training_employee(
 		REFERENCES employee(id)
 );
 
-CREATE TABLE IF NOT EXISTS employees_fact(
+CREATE TABLE IF NOT EXISTS employee_fact(
 	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	employee_id SMALLINT,
 	job_role_id TINYINT,
@@ -62,10 +85,11 @@ CREATE TABLE IF NOT EXISTS employees_fact(
 	sick_leave_hours SMALLINT,
 	current_flag BIT,
 	rowgu_id VARCHAR(50),
-	salary DECIMAL(7,3),
+	salary DECIMAL(9,2),
 	location VARCHAR(15),
 	FOREIGN KEY(job_role_id)
 		REFERENCES job_role(id),
 	FOREIGN KEY(employee_id)
 		REFERENCES employee(id)
 );
+

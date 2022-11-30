@@ -17,7 +17,7 @@ public class trueConfiguration extends Configuration {
 
     @JsonProperty("swagger")
     public SwaggerBundleConfiguration getSwagger() {
-        swagger.setResourcePackage("com.kainos.ea.resources");
+        swagger.setResourcePackage("com.kainos.ea");
         String[] schemes = {"http", "https"};
         swagger.setSchemes(schemes);
         return swagger;

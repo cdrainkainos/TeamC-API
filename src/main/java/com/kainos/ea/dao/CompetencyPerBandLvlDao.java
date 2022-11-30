@@ -17,15 +17,20 @@ public class CompetencyPerBandLvlDao {
 
         try{
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("" +role_id );
+            ResultSet rs = st.executeQuery("SELECT DISTINCT temp.id, band_level, band_name, competency_name FROM (\n" +
+                    "    SELECT job_role.*, band.band_level, band.band_name, competency_band.competency_id FROM job_role\n" +
+                    "          JOIN band ON band_id = band.id\n" +
+                    "          JOIN competency_band ON band.id = competency_band.band_id) AS temp\n" +
+                    "      JOIN competency ON competency_id=competency.id\n" +
+                    "      WHERE temp.id = " + role_id );
             List<CompetencyPerBandLvl> competencyPerBandLvl = new ArrayList<>();
 
             while (rs.next()) {
-                CompetencyPerBandLvl jobSpecification = new CompetencyPerBandLvl(
+                CompetencyPerBandLvl competencyPerBandLvls = new CompetencyPerBandLvl(
                         rs.getInt("band_level"),
                         rs.getString("band_name"),
                         rs.getString("competency_name"));
-                competencyPerBandLvl.add(jobSpecification);
+                competencyPerBandLvl.add(competencyPerBandLvls);
             }
 
             if(competencyPerBandLvl.isEmpty()){

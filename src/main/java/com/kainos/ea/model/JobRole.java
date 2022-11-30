@@ -8,12 +8,20 @@ public class JobRole {
     private int id;
     private String role_title;
 
+    private String bandName;
+
+    private String capability_name;
+
     @JsonCreator
     public JobRole(
             @JsonProperty("id") int id,
-            @JsonProperty("kainos_job_title") String role_title) {
+            @JsonProperty("kainos_job_title") String role_title,
+            @JsonProperty("band_name") String bandName,
+            @JsonProperty("capability_name") String capability){
         this.setRoleID(id);
         this.setRole_title(role_title);
+        this.setBandName(bandName);
+        this.setCapability_name(capability);
     }
 
     public int getRoleID() {
@@ -31,5 +39,17 @@ public class JobRole {
     public void setRole_title(String role_title) {
         this.role_title = role_title;
     }
+
+    public String getBandName() {
+        return bandName;
+    }
+
+    public void setBandName(String bandName) {
+        this.bandName = bandName;
+    }
+
+    public String getCapability_name() { return capability_name; }
+
+    public void setCapability_name(String capability_name) { this.capability_name = capability_name; }
 
 }

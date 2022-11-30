@@ -8,6 +8,7 @@ public class CompetencyPerBandLvl {
     private String bandName;
     private String competencyName;
 
+
     @JsonCreator
     public CompetencyPerBandLvl(
             @JsonProperty("band_level") int bandLvl,

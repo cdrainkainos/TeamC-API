@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class WebServiceIntegrationTest {
@@ -26,7 +26,7 @@ public class WebServiceIntegrationTest {
     );
 
     @Test
-    void getJobRoles_shouldReturnListOfJobRoles_withValidValues() {
+    void getJobRoles_shouldReturnListOfJobRoles_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
@@ -36,7 +36,10 @@ public class WebServiceIntegrationTest {
         );
 
         assertTrue(JobRoleList.size() > 0);
-        Assertions.assertEquals(JobRoleList.get(0).getBandName(), "Executive");
+        assertNotNull(JobRoleList.get(0).getBandName());
+        assertNotNull(JobRoleList.get(0).getRoleID());
+        assertNotNull(JobRoleList.get(0).getRole_title());
+        assertNotNull(JobRoleList.get(0).getCapability_name());
 
     }
 

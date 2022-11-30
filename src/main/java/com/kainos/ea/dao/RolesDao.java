@@ -26,7 +26,7 @@ public class RolesDao {
             while (rs.next()) {
                 JobRole role = new JobRole(
                         rs.getInt("id"),
-                        rs.getString("Kainos_Job_Title"),
+                        rs.getString("kainos_Job_Title"),
                         rs.getString("capability_name"));
                 jobRoles.add(role);
             }

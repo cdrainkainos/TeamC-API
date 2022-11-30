@@ -27,11 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RolesServiceTest {
 
-    static final DropwizardAppExtension<trueConfiguration> APP = new DropwizardAppExtension<>(
-            trueApplication.class, null,
-            new ResourceConfigurationSourceProvider()
-    );
-
     RolesDao rolesDao = Mockito.mock(RolesDao.class);
 
     DatabaseConnection databaseConnector = Mockito.mock(DatabaseConnection.class);

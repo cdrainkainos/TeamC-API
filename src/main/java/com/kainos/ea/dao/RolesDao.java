@@ -54,5 +54,9 @@ public class RolesDao {
         return null;
     }
 
+//    public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException {
+//        String updateJobRoleQuery = "INSERT INTO job_role()"
+//    }
+
 
 }

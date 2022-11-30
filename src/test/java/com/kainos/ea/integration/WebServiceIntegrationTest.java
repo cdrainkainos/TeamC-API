@@ -1,5 +1,8 @@
 package com.kainos.ea.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
 import com.kainos.ea.model.JobRole;
@@ -11,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class WebServiceIntegrationTest {
@@ -21,13 +24,22 @@ public class WebServiceIntegrationTest {
             new ResourceConfigurationSourceProvider()
     );
 
-
     @Test
-    void getEmployees_shouldReturnListOfEmployees() {
-        List<JobRole> response = APP.client().target("http://localhost:8080/api/job-roles")
-                .request()
-                .get(List.class);
-        assertTrue(response.size() > 0);
-    }
+    void getEmployees_shouldReturnListOfEmployees_withFieldsNotNull() {
 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
+                .request()
+                .get(JsonNode.class);
+        List<JobRole> JobRoleList = mapper.convertValue(
+                response,
+                new TypeReference<List<JobRole>>(){}
+        );
+
+        assertTrue(response.size() > 0);
+        assertNotNull(JobRoleList.get(0).getRoleID());
+        assertNotNull(JobRoleList.get(0).getRole_title());
+        assertNotNull(JobRoleList.get(0).getCapability_name());
+
+    }
 }

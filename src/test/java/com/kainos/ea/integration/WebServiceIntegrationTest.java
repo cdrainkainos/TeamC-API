@@ -9,6 +9,7 @@ import com.kainos.ea.model.JobRole;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -25,21 +26,21 @@ public class WebServiceIntegrationTest {
     );
 
     @Test
-    void getEmployees_shouldReturnListOfEmployees_withFieldsNotNull() {
-
+    void getJobRoles_shouldReturnListOfJobRoles_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
                 .get(JsonNode.class);
         List<JobRole> JobRoleList = mapper.convertValue(
-                response,
-                new TypeReference<List<JobRole>>(){}
+                response, new TypeReference<List<JobRole>>(){}
         );
 
-        assertTrue(response.size() > 0);
+        assertTrue(JobRoleList.size() > 0);
+        assertNotNull(JobRoleList.get(0).getBandName());
         assertNotNull(JobRoleList.get(0).getRoleID());
         assertNotNull(JobRoleList.get(0).getRole_title());
         assertNotNull(JobRoleList.get(0).getCapability_name());
 
     }
+
 }

@@ -24,7 +24,7 @@ public class RolesService {
     public List<JobRole> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
         return rolesDao.getAllRoles(databaseConnector.getConnection());
     }
-    public List<JobSpecification> getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
+    public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
         return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
     }
 }

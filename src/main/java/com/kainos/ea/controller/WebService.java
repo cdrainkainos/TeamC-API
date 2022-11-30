@@ -46,7 +46,7 @@ public class WebService {
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getAllSpecifications(role_id)).build();
         } catch (RoleNotExistException e){
-            return Response.status(HttpStatus.NO_CONTENT_204, e.getMessage()).build();
+            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }

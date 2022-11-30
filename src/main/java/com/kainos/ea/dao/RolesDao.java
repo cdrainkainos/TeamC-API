@@ -33,24 +33,22 @@ public class RolesDao {
         }
 
     }
-    public List<JobSpecification> getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {
+    public JobSpecification getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {
 
         try{
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT kainos_job_title, job_specification, job_spec_link  FROM job_role Where id =" +role_id );
-            List<JobSpecification> jobSpecifications = new ArrayList<>();
-
+            JobSpecification jobSpecification = null;
             while (rs.next()) {
-                JobSpecification jobSpecification = new JobSpecification(
+                 jobSpecification = new JobSpecification(
                         rs.getString("kainos_job_title"),
                         rs.getString("job_specification"),
                         rs.getString("job_spec_link"));
-                jobSpecifications.add(jobSpecification);
             }
-
-            if(jobSpecifications.isEmpty()){
+            if(jobSpecification == null){
                 throw new RoleNotExistException("Select record that is not empty");
-            } else return jobSpecifications;
+            } else return jobSpecification;
+
 
         } catch (SQLException e) {
             throw new SQLException ("Select query for job specifications is incorrect");

@@ -1,5 +1,6 @@
 package com.kainos.ea.integration;
 
+import com.kainos.ea.model.Band;
 import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
@@ -34,15 +35,29 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getRoleById_shouldReturnEmployee() {
-
+    void getRoleById_shouldReturnJobRole() {
         int testID = 1;
-
         JobRoleXL response = APP.client().target("http://localhost:8080/api/job-roles/1")
                 .request()
                 .get(JobRoleXL.class);
         assertNotNull(response);
+    }
 
+    @Test
+    void getBands_shouldReturnListOfBands() {
+        List<Band> response = APP.client().target("http://localhost:8080/api/bands")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
+
+    @Test
+    void getRBandById_shouldReturnBand() {
+        int testID = 1;
+        JobRoleXL response = APP.client().target("http://localhost:8080/api/bands/1")
+                .request()
+                .get(JobRoleXL.class);
+        assertNotNull(response);
     }
 
 

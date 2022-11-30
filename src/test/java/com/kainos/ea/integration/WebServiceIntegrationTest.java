@@ -1,10 +1,8 @@
 package com.kainos.ea.integration;
 
-import com.kainos.ea.model.Band;
-import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.model.*;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
-import com.kainos.ea.model.JobRole;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
@@ -51,14 +49,45 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getRBandById_shouldReturnBand() {
+    void getBandById_shouldReturnBand() {
         int testID = 1;
-        JobRoleXL response = APP.client().target("http://localhost:8080/api/bands/1")
+        Band response = APP.client().target("http://localhost:8080/api/bands/1")
                 .request()
-                .get(JobRoleXL.class);
+                .get(Band.class);
         assertNotNull(response);
     }
 
+    @Test
+    void getCapabilities_shouldReturnListOfCapabilities() {
+        List<Capability> response = APP.client().target("http://localhost:8080/api/capabilities")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
 
+    @Test
+    void getCapabilityById_shouldReturnCapability() {
+        int testID = 1;
+        Capability response = APP.client().target("http://localhost:8080/api/capabilities/1")
+                .request()
+                .get(Capability.class);
+        assertNotNull(response);
+    }
 
+    @Test
+    void getFamilies_shouldReturnListOfCapabilities() {
+        List<JobFamily> response = APP.client().target("http://localhost:8080/api/job-families")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
+
+    @Test
+    void getFamilyById_shouldReturnFamily() {
+        int testID = 1;
+        JobFamily response = APP.client().target("http://localhost:8080/api/job-families/1")
+                .request()
+                .get(JobFamily.class);
+        assertNotNull(response);
+    }
 }

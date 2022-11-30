@@ -14,8 +14,6 @@ import org.eclipse.jetty.http.HttpStatus;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.sql.SQLException;
 
 @Api("Engineering Academy Dropwizard API")
 @Path("/api")

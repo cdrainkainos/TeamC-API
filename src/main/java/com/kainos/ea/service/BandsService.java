@@ -4,9 +4,7 @@ import com.kainos.ea.dao.BandsDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.BandDoesNotExistException;
 import com.kainos.ea.exception.DatabaseConnectionException;
-import com.kainos.ea.exception.JobRoleDoesNotExistException;
 import com.kainos.ea.model.Band;
-import com.kainos.ea.model.JobRoleXL;
 
 import java.io.IOException;
 import java.sql.SQLException;

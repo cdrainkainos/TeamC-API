@@ -1,8 +1,6 @@
 package com.kainos.ea.dao;
 
 import com.kainos.ea.model.Band;
-import com.kainos.ea.model.JobRole;
-import com.kainos.ea.model.JobRoleXL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

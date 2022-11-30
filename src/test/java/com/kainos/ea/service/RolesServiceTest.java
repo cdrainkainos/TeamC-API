@@ -48,7 +48,7 @@ class RolesServiceTest {
     }
 
     @Test
-    void getAllRoles_shouldReturnSpecification_whenDaoReturnsSpecification() throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
+    void getAllSpecifications_shouldReturnSpecification_whenDaoReturnsSpecification() throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
         int role_id = 1;
         JobSpecification specification_list = new JobSpecification("test", "test", "test");
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
@@ -72,5 +72,4 @@ class RolesServiceTest {
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(RoleNotExistException.class);
         assertThrows(RoleNotExistException.class, () -> rolesService.getAllSpecifications(role_id));
     }
-
 }

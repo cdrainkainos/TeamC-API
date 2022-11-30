@@ -24,7 +24,8 @@ public class RolesDao {
                     "JOIN capability " +
                     "ON (job_family.capability_id = capability.id)" +
                     "JOIN band " +
-                    "ON job_role.band_id=band.id;");
+                    "ON job_role.band_id=band.id " +
+                    "ORDER BY job_role.id;");
 
             List<JobRole> jobRoles = new ArrayList<>();
 
@@ -32,8 +33,8 @@ public class RolesDao {
                 JobRole role = new JobRole(
                         rs.getInt("id"),
                         rs.getString("kainos_job_title"),
-                        rs.getString("capability_name"),
-                        rs.getString("band_name"));
+                        rs.getString("band_name"),
+                        rs.getString("capability_name"));
                 jobRoles.add(role);
             }
             return jobRoles;

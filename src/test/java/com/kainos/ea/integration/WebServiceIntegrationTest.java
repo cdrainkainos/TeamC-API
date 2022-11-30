@@ -26,15 +26,7 @@ public class WebServiceIntegrationTest {
     );
 
     @Test
-    void getEmployees_shouldReturnListOfRoles() {
-        List<JobRole> response = APP.client().target("http://localhost:8080/api/job-roles")
-                .request()
-                .get(List.class);
-        assertTrue(response.size() > 0);
-    }
-
-    @Test
-    void getJobRoles_shouldReturnListOfJobRoles_withValidBandName() {
+    void getJobRoles_shouldReturnListOfJobRoles_withValidValues_notNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
@@ -43,6 +35,7 @@ public class WebServiceIntegrationTest {
                 response, new TypeReference<List<JobRole>>(){}
         );
 
+        assertTrue(JobRoleList.size() > 0);
         Assertions.assertEquals(JobRoleList.get(0).getBandName(), "Executive");
 
     }

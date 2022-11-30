@@ -3,7 +3,9 @@ package com.kainos.ea.service;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
+import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.model.JobRole;
+import com.kainos.ea.model.JobSpecification;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,5 +23,8 @@ public class RolesService {
 
     public List<JobRole> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
         return rolesDao.getAllRoles(databaseConnector.getConnection());
+    }
+    public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
+        return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
     }
 }

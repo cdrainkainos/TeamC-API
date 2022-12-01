@@ -86,7 +86,7 @@ public class RolesDao {
         prepStm.setString(3, jobRoleXL.getRole_title());
         prepStm.setString(4, jobRoleXL.getJobSpecification());
         prepStm.setString(5, jobRoleXL.getJobSpecLink());
-        prepStm.setInt(6, jobRoleXL.getRoleID());
+        prepStm.setInt(6, jobRoleXL.getId());
 
         int affectedRows = prepStm.executeUpdate();
 
@@ -100,7 +100,7 @@ public class RolesDao {
             if (rs.next()){
                 recordId = rs.getInt(1);
             } else {
-                recordId = jobRoleXL.getRoleID();
+                recordId = jobRoleXL.getId();
             }
         }
         return recordId;

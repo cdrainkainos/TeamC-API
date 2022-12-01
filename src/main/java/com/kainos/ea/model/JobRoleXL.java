@@ -3,10 +3,12 @@ package com.kainos.ea.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JobRoleXL extends JobRole {
+public class JobRoleXL {
 
+    private int id;
     private int bandId;
     private int jobFamilyId;
+    private String role_title;
     private String jobSpecification;
     private String jobSpecLink;
 
@@ -19,7 +21,8 @@ public class JobRoleXL extends JobRole {
             @JsonProperty("job_specification") String jobSpecification,
             @JsonProperty("job_spec_link") String jobSpecLink
     ) {
-        super(id, role_title);
+        this.setId(id);
+        this.setRole_title(role_title);
         this.setBandId(bandId);
         this.setJobFamilyId(jobFamilyId);
         this.setJobSpecification(jobSpecification);
@@ -58,4 +61,19 @@ public class JobRoleXL extends JobRole {
         this.jobSpecLink = jobSpecLink;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRole_title() {
+        return role_title;
+    }
+
+    public void setRole_title(String role_title) {
+        this.role_title = role_title;
+    }
 }

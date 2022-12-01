@@ -25,9 +25,11 @@ public class JobRoleValidator {
             return false;
         }
 
-        String linkRegex = "^((http|https)://)[-a-zA-Z0-9@:%._\\\\+~#?&//=]{2,256}\\\\.[a-z]{2,6}\\\\b([-a-zA-Z0-9@:%._\\\\+~#?&//=]*)$";
+
+        String linkRegex = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$";
         Pattern pattern = Pattern.compile(linkRegex);
         if (!pattern.matcher(jobRoleXL.getJobSpecLink()).matches()){
+            System.out.println(jobRoleXL.getJobSpecLink());
             throw new LinkSyntaxException();
         }
 

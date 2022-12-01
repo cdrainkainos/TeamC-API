@@ -85,10 +85,11 @@ CREATE TABLE IF NOT EXISTS employee_fact(
 	sick_leave_hours SMALLINT,
 	current_flag BIT,
 	rowgu_id VARCHAR(50),
-	salary DECIMAL(7,2),
+	salary DECIMAL(9,2),
 	location VARCHAR(15),
 	FOREIGN KEY(job_role_id)
 		REFERENCES job_role(id),
 	FOREIGN KEY(employee_id)
 		REFERENCES employee(id)
 );
+

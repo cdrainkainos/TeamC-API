@@ -7,6 +7,10 @@ import com.kainos.ea.exception.JobRoleDoesNotExistException;
 import com.kainos.ea.model.JobFamily;
 import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.exception.RoleNotExistException;
+import com.kainos.ea.model.JobRole;
+import com.kainos.ea.model.JobSpecification;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,9 +37,14 @@ public class RolesService {
 
     public JobRoleXL getRoleById(int roleID) throws DatabaseConnectionException, SQLException, IOException, JobRoleDoesNotExistException {
         JobRoleXL jobRoleXL = rolesDao.getRoleById(roleID, databaseConnector.getConnection());
-        if (Objects.isNull(jobRoleXL)){
+        if (Objects.isNull(jobRoleXL)) {
             throw new JobRoleDoesNotExistException();
         }
         return jobRoleXL;
+    }
+
+    public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
+        return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
+
     }
 }

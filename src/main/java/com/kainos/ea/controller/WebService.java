@@ -12,6 +12,8 @@ import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.service.BandsService;
 import com.kainos.ea.service.CapabilitiesService;
 import com.kainos.ea.service.FamiliesService;
+import com.kainos.ea.exception.DatabaseConnectionException;
+import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.service.RolesService;
 import com.kainos.ea.validator.JobRoleValidator;
 import io.swagger.annotations.*;
@@ -23,7 +25,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@Api("Engineering Academy Dropwizard API")
+@Api("Team C Sprint")
 @Path("/api")
 
 public class WebService {
@@ -186,4 +188,16 @@ public class WebService {
         }
     }
 
+    @Path("/job-specification/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJobSpecification(@PathParam("id") int role_id)
+    {
+        try {
+            return Response.status(HttpStatus.OK_200).entity(rolesService.getAllSpecifications(role_id)).build();
+        } catch (RoleNotExistException e){
+            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
+        } catch (DatabaseConnectionException | Exception e) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
+        }
+    }
 }

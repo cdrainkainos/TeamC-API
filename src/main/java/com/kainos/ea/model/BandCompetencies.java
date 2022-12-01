@@ -3,17 +3,19 @@ package com.kainos.ea.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CompetencyPerBandLvl {
+import java.util.List;
+
+public class BandCompetencies {
     private int bandLvl;
     private String bandName;
-    private String competencyName;
+    private List<String> competencyName;
 
 
     @JsonCreator
-    public CompetencyPerBandLvl(
+    public BandCompetencies(
             @JsonProperty("band_level") int bandLvl,
             @JsonProperty("band_name") String bandName,
-            @JsonProperty("competency_name") String competencyName){
+            @JsonProperty("competency_name") List<String> competencyName){
         this.setBandLvl(bandLvl);
         this.setBandName(bandName);
         this.setCompetencyName(competencyName);
@@ -35,11 +37,11 @@ public class CompetencyPerBandLvl {
         this.bandName = bandName;
     }
 
-    public String getCompetencyName() {
+    public List<String> getCompetencyName() {
         return competencyName;
     }
 
-    public void setCompetencyName(String competencyName) {
+    public void setCompetencyName(List<String> competencyName) {
         this.competencyName = competencyName;
     }
 }

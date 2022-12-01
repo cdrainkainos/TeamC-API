@@ -1,6 +1,6 @@
 package com.kainos.ea.controller;
 
-import com.kainos.ea.dao.CompetencyPerBandLvlDao;
+import com.kainos.ea.dao.CompetencyDao;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.CompetencyPerBandLvlNotExistException;
@@ -24,10 +24,10 @@ public class WebService {
     private static CompetencyService competencyService;
     public WebService(){
         RolesDao rolesDao = new RolesDao();
-        CompetencyPerBandLvlDao competencyPerBandLvlDao = new CompetencyPerBandLvlDao();
+        CompetencyDao competencyDao = new CompetencyDao();
         DatabaseConnection databaseConnector = new DatabaseConnection();
         rolesService = new RolesService(rolesDao, databaseConnector);
-        competencyService = new CompetencyService(competencyPerBandLvlDao, databaseConnector);
+        competencyService = new CompetencyService(competencyDao, databaseConnector);
     }
 
     @GET
@@ -57,12 +57,12 @@ public class WebService {
         }
     }
     @GET
-    @Path("/band-competency/{id}")
+    @Path("/competencies/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBandCompetency(@PathParam("id") int role_id)
+    public Response getBandCompetency(@PathParam("id") int band_id)
     {
         try {
-            return Response.status(HttpStatus.OK_200).entity(competencyService.getAllCompetencyPerBandLvl(role_id)).build();
+            return Response.status(HttpStatus.OK_200).entity(competencyService.getAllCompetencyPerBandLvl(band_id)).build();
         } catch (CompetencyPerBandLvlNotExistException e){
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {

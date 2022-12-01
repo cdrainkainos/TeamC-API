@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.kainos.ea.model.CompetencyPerBandLvl;
+import com.kainos.ea.model.BandCompetencies;
 import com.kainos.ea.model.JobSpecification;
 
 import com.kainos.ea.trueApplication;
@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -81,13 +79,13 @@ public class WebServiceIntegrationTest {
         JsonNode response = APP.client().target("http://localhost:8080/api/band-competency/1")
                 .request()
                 .get(JsonNode.class);
-        List<CompetencyPerBandLvl> CompetencyPerBandLvl = mapper.convertValue(
-                response, new TypeReference<List<CompetencyPerBandLvl>>(){}
+        List<BandCompetencies> BandCompetencies = mapper.convertValue(
+                response, new TypeReference<List<BandCompetencies>>(){}
         );
 
-        assertTrue(CompetencyPerBandLvl.size() > 0);
-        assertNotNull(CompetencyPerBandLvl.get(0).getBandLvl());
-        assertNotNull(CompetencyPerBandLvl.get(0).getBandName());
-        assertNotNull(CompetencyPerBandLvl.get(0).getCompetencyName());
+        assertTrue(BandCompetencies.size() > 0);
+        assertNotNull(BandCompetencies.get(0).getBandLvl());
+        assertNotNull(BandCompetencies.get(0).getBandName());
+        assertNotNull(BandCompetencies.get(0).getCompetencyName());
     }
 }

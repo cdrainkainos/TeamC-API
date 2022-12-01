@@ -38,7 +38,7 @@ public class CompetencyPerBandLvlDao {
             } else return competencyPerBandLvl;
 
         } catch (SQLException e) {
-            throw new SQLException ("Select query for job specifications is incorrect");
+            throw new SQLException ("Select query for competency per band level is incorrect");
         }
     }
 }

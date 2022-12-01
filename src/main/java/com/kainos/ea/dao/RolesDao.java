@@ -32,8 +32,8 @@ public class RolesDao {
                 JobRole role = new JobRole(
                         rs.getInt("id"),
                         rs.getString("kainos_job_title"),
-                        rs.getString("capability_name"),
-                        rs.getString("band_name"));
+                        rs.getString("band_name"),
+                        rs.getString("capability_name"));
                 jobRoles.add(role);
             }
             return jobRoles;

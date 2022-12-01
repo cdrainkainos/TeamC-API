@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.kainos.ea.model.CompetencyPerBandLvl;
 import com.kainos.ea.model.JobSpecification;
 
 import com.kainos.ea.trueApplication;
@@ -74,4 +75,19 @@ public class WebServiceIntegrationTest {
         assertNotNull(JobRoleList.get(0).getCapability_name());
     }
 
+    @Test
+    void getCompetencyPerBand_shouldReturnListOfCompetencies_withFieldsNotNull() {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode response = APP.client().target("http://localhost:8080/api/band-competency/1")
+                .request()
+                .get(JsonNode.class);
+        List<CompetencyPerBandLvl> CompetencyPerBandLvl = mapper.convertValue(
+                response, new TypeReference<List<CompetencyPerBandLvl>>(){}
+        );
+
+        assertTrue(CompetencyPerBandLvl.size() > 0);
+        assertNotNull(CompetencyPerBandLvl.get(0).getBandLvl());
+        assertNotNull(CompetencyPerBandLvl.get(0).getBandName());
+        assertNotNull(CompetencyPerBandLvl.get(0).getCompetencyName());
+    }
 }

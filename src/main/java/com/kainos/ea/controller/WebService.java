@@ -6,16 +6,22 @@ import com.kainos.ea.dao.FamilyDao;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.*;
+import com.kainos.ea.exception.validation.LinkSyntaxException;
+import com.kainos.ea.model.JobFamily;
+import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.service.BandsService;
 import com.kainos.ea.service.CapabilitiesService;
 import com.kainos.ea.service.FamiliesService;
 import com.kainos.ea.service.RolesService;
+import com.kainos.ea.validator.JobRoleValidator;
 import io.swagger.annotations.*;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Api("Engineering Academy Dropwizard API")
 @Path("/api")
@@ -27,6 +33,8 @@ public class WebService {
     private static FamiliesService familiesService;
     private static CapabilitiesService capabilitiesService;
 
+    private static JobRoleValidator jobRoleValidator;
+
     public WebService(){
         RolesDao rolesDao = new RolesDao();
         BandsDao bandsDao = new BandsDao();
@@ -37,6 +45,7 @@ public class WebService {
         bandsService = new BandsService(bandsDao, databaseConnector);
         familiesService = new FamiliesService(familyDao, databaseConnector);
         capabilitiesService = new CapabilitiesService(capabilityDao, databaseConnector);
+        jobRoleValidator = new JobRoleValidator();
     }
 
     @GET
@@ -62,6 +71,29 @@ public class WebService {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         } catch (JobRoleDoesNotExistException e){
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
+        }
+    }
+
+    //TODO: PUT data validation, remove e.printStackTrace
+    @PUT
+    @Path("/job-roles")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateJobRole(JobRoleXL jobRoleXL){
+        try{
+            if (jobRoleValidator.isValidJobRole(jobRoleXL)){
+                try {
+                    int id = rolesService.updateJobRole(jobRoleXL);
+                    return Response.status(HttpStatus.OK_200).entity(id).build();
+                } catch (Exception | DatabaseConnectionException e) {
+                    e.printStackTrace();
+                    return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+                }
+            } else {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            }
+        } catch (LinkSyntaxException e) {
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
         }
     }
 
@@ -112,6 +144,23 @@ public class WebService {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
+
+
+    //TODO: PUT data validation,  remove e.printStackTrace
+    @PUT
+    @Path("/job-families")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateJobFamily(JobFamily jobFamily){
+        try {
+            int id = familiesService.updateJobFamily(jobFamily);
+            return Response.status(HttpStatus.OK_200).entity(id).build();
+        } catch (Exception | DatabaseConnectionException e) {
+            e.printStackTrace();
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
+    }
+
 
     @GET
     @Path("/capabilities/{id}")

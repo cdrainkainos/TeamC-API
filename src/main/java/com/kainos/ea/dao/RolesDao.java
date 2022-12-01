@@ -1,12 +1,10 @@
 package com.kainos.ea.dao;
 
+import com.kainos.ea.model.JobFamily;
 import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobRoleXL;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +52,42 @@ public class RolesDao {
         return null;
     }
 
-//    public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException {
-//        String updateJobRoleQuery = "INSERT INTO job_role()"
-//    }
+    //TODO: what to return with update ?
+    public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException{
+
+        String updateQuery = "UPDATE job_role SET" +
+                " band_id = ?," +
+                " job_family_id = ?," +
+                " kainos_job_title = ?," +
+                " job_specification = ?, " +
+                " job_spec_link = ? " +
+                "WHERE id = ?";
+
+        PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
+        prepStm.setInt(1, jobRoleXL.getBandId());
+        prepStm.setInt(2, jobRoleXL.getJobFamilyId());
+        prepStm.setString(3, jobRoleXL.getRole_title());
+        prepStm.setString(4, jobRoleXL.getJobSpecification());
+        prepStm.setString(5, jobRoleXL.getJobSpecLink());
+        prepStm.setInt(6, jobRoleXL.getRoleID());
+
+        int affectedRows = prepStm.executeUpdate();
+
+        if (affectedRows == 0){
+            throw new SQLException("Update failed, no rows affected.");
+        }
+
+        int recordId;
+
+        try(ResultSet rs = prepStm.getGeneratedKeys()){
+            if (rs.next()){
+                recordId = rs.getInt(1);
+            } else {
+                recordId = jobRoleXL.getRoleID();
+            }
+        }
+        return recordId;
+    }
 
 
 }

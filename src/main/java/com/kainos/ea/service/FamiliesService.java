@@ -22,6 +22,10 @@ public class FamiliesService {
         this.databaseConnector = databaseConnector;
     }
 
+    public int updateJobFamily(JobFamily jobFamily) throws SQLException, DatabaseConnectionException, IOException {
+        return familyDao.updateJobFamilyCapability(jobFamily, databaseConnector.getConnection());
+    }
+
     public JobFamily getFamilyById(int familyId) throws SQLException, DatabaseConnectionException, IOException, FamilyDoesNotExistException {
         JobFamily jobFamily = familyDao.getFamilyById(familyId, databaseConnector.getConnection());
         if (Objects.isNull(jobFamily)){

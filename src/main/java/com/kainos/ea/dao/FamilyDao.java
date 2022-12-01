@@ -3,10 +3,7 @@ package com.kainos.ea.dao;
 import com.kainos.ea.model.Band;
 import com.kainos.ea.model.JobFamily;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +11,37 @@ public class FamilyDao {
 
     public FamilyDao(){
     }
+
+    //TODO: what to return with update ?
+    public int updateJobFamilyCapability(JobFamily jobFamily, Connection c) throws SQLException{
+
+        String updateQuery = "UPDATE job_family " +
+                "SET capability_id = ? " +
+                "WHERE id = ?";
+
+        PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
+        prepStm.setInt(1, jobFamily.getCapabilityId());
+        prepStm.setInt(2, jobFamily.getId());
+
+        int affectedRows = prepStm.executeUpdate();
+
+        if (affectedRows == 0){
+            throw new SQLException("Update failed, no rows affected.");
+        }
+
+        int famId = 0;
+
+        try(ResultSet rs = prepStm.getGeneratedKeys()){
+            if (rs.next()){
+                famId = rs.getInt(1);
+            } else {
+                famId = jobFamily.getId();
+            }
+        }
+        return famId;
+    }
+
+
 
     public JobFamily getFamilyById(int familyID, Connection c) throws SQLException {
 
@@ -49,4 +77,5 @@ public class FamilyDao {
         }
         return jobFamilies;
     }
+
 }

@@ -45,7 +45,7 @@ public class WebServiceIntegrationTest {
         Assertions.assertEquals(response.getJobSpecification(), jTest.getJobSpecification());
         Assertions.assertEquals(response.getJobSpecificationLink(), jTest.getJobSpecificationLink());
     }
-    
+
     @Test
     void getSpecificationByNegativeId_shouldReturn404Exception() {
         int id = -1;
@@ -76,7 +76,7 @@ public class WebServiceIntegrationTest {
     @Test
     void getCompetencyPerBand_shouldReturnListOfCompetencies_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode response = APP.client().target("http://localhost:8080/api/band-competency/1")
+        JsonNode response = APP.client().target("http://localhost:8080/api/competencies/1")
                 .request()
                 .get(JsonNode.class);
         List<BandCompetencies> BandCompetencies = mapper.convertValue(
@@ -88,4 +88,15 @@ public class WebServiceIntegrationTest {
         assertNotNull(BandCompetencies.get(0).getBandName());
         assertNotNull(BandCompetencies.get(0).getCompetencyName());
     }
+
+    @Test
+    void getCompetenciesByNegativeId_shouldReturn404Exception() {
+        int id = -1;
+        Response response = APP.client().target("http://localhost:8080/api/competencies/"+ id)
+                .request()
+                .get();
+        Assertions.assertEquals(404, response.getStatus());
+    }
 }
+
+

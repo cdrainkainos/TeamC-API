@@ -47,4 +47,6 @@ public class CompetenciesPerBandLvlService {
         Mockito.when(competencyDao.getAllCompetencyPerBandLvl(conn, role_id)).thenThrow(CompetencyPerBandLvlNotExistException.class);
         assertThrows(CompetencyPerBandLvlNotExistException.class, () -> competencyDao.getAllCompetencyPerBandLvl(conn, role_id));
     }
+
+
 }

@@ -45,8 +45,8 @@ public class CompetencyDao {
                 bandCompetencies.add(bandLvls);
 
 
-            if(bandCompetencies.isEmpty()){
-                throw new CompetencyPerBandLvlNotExistException("Select record that is not empty");
+            if(competencyBandNames.isEmpty()){
+                throw new CompetencyPerBandLvlNotExistException("competencies not found");
             } else return bandCompetencies;
 
         } catch (SQLException e) {

@@ -22,5 +22,4 @@ public class CompetencyService {
     public List<BandCompetencies> getAllCompetencyPerBandLvl(int role_id) throws SQLException, DatabaseConnectionException, IOException, CompetencyPerBandLvlNotExistException {
         return competencyDao.getAllCompetencyPerBandLvl(databaseConnector.getConnection(),role_id);
     }
-
 }

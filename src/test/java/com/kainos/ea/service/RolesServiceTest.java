@@ -2,24 +2,14 @@ package com.kainos.ea.service;
 
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.exception.DatabaseConnectionException;
-
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
 import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobSpecification;
-import com.kainos.ea.trueApplication;
-import com.kainos.ea.trueConfiguration;
-import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
-import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -111,6 +101,44 @@ class RolesServiceTest {
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(RoleNotExistException.class);
         assertThrows(RoleNotExistException.class, () -> rolesService.getAllSpecifications(role_id));
     }
+
+    @Test
+    void updateJobRole_shouldThrowSqlException_whenDaoThrowsSqlException() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        JobRoleXL testJobRole = new JobRoleXL(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "Test job spec link"
+        );
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.updateJobRole(testJobRole, conn)).thenThrow(SQLException.class);
+
+        assertThrows(SQLException.class, ()-> rolesService.updateJobRole(testJobRole));
+    }
+
+    @Test
+    void updateJobRole_shouldReturnId_whenDaoReturnsId() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        JobRoleXL testJobRole = new JobRoleXL(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "Test job spec link"
+        );
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.updateJobRole(testJobRole, conn)).thenReturn(testID);
+        int result = rolesService.updateJobRole(testJobRole);
+
+        assertEquals(result, testID);
+    }
+
+
+
 }
 
 

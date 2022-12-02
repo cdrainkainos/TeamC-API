@@ -4,14 +4,10 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
-import com.kainos.ea.model.JobFamily;
 import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobSpecification;
-
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

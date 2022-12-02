@@ -8,7 +8,6 @@ public class Capability {
     private int id;
     private String capabilityName;
 
-
     @JsonCreator
     public Capability(
             @JsonProperty("id") int id,

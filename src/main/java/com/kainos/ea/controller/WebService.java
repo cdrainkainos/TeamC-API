@@ -22,8 +22,6 @@ import org.eclipse.jetty.http.HttpStatus;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.sql.SQLException;
 
 @Api("Team C Sprint")
 @Path("/api")
@@ -76,7 +74,6 @@ public class WebService {
         }
     }
 
-    //TODO: PUT data validation, remove e.printStackTrace
     @PUT
     @Path("/job-roles")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -88,7 +85,6 @@ public class WebService {
                     int id = rolesService.updateJobRole(jobRoleXL);
                     return Response.status(HttpStatus.OK_200).entity(id).build();
                 } catch (Exception | DatabaseConnectionException e) {
-                    e.printStackTrace();
                     return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
                 }
             } else {
@@ -147,7 +143,6 @@ public class WebService {
         }
     }
 
-
     //TODO: PUT data validation,  remove e.printStackTrace
     @PUT
     @Path("/job-families")
@@ -162,7 +157,6 @@ public class WebService {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
-
 
     @GET
     @Path("/capabilities/{id}")
@@ -188,6 +182,7 @@ public class WebService {
         }
     }
 
+    @GET
     @Path("/job-specification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJobSpecification(@PathParam("id") int role_id)

@@ -1,8 +1,6 @@
 package com.kainos.ea.dao;
 
-import com.kainos.ea.model.Band;
 import com.kainos.ea.model.JobFamily;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

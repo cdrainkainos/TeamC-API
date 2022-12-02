@@ -1,7 +1,6 @@
 package com.kainos.ea.dao;
 
 import com.kainos.ea.model.Band;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

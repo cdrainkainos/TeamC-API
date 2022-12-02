@@ -1,13 +1,9 @@
 package com.kainos.ea.dao;
-import com.kainos.ea.model.JobFamily;
 import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobRoleXL;
-
 import java.sql.*;
 import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobSpecification;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

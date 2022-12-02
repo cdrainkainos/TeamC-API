@@ -1,12 +1,9 @@
 package com.kainos.ea.service;
 
-import com.kainos.ea.dao.CapabilityDao;
 import com.kainos.ea.dao.FamilyDao;
 import com.kainos.ea.database.DatabaseConnection;
-import com.kainos.ea.exception.CapabilityDoesNotExistException;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.FamilyDoesNotExistException;
-import com.kainos.ea.model.Capability;
 import com.kainos.ea.model.JobFamily;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

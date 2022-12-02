@@ -5,8 +5,6 @@ import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.FamilyDoesNotExistException;
 import com.kainos.ea.model.JobFamily;
-import com.kainos.ea.model.JobRole;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -37,9 +35,5 @@ public class FamiliesService {
     public List<JobFamily> getAllFamilies() throws SQLException, DatabaseConnectionException, IOException {
         return familyDao.getAllFamilies(databaseConnector.getConnection());
     }
-
-
-
-
 
 }

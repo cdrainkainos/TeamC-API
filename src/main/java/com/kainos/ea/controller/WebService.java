@@ -3,7 +3,7 @@ package com.kainos.ea.controller;
 import com.kainos.ea.dao.CompetencyDao;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
-import com.kainos.ea.exception.CompetencyPerBandLvlNotExistException;
+import com.kainos.ea.exception.BandNotExistException;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.service.CompetencyService;
@@ -63,7 +63,7 @@ public class WebService {
     {
         try {
             return Response.status(HttpStatus.OK_200).entity(competencyService.getAllCompetencyPerBandLvl(band_id)).build();
-        } catch (CompetencyPerBandLvlNotExistException e){
+        } catch (BandNotExistException e){
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();

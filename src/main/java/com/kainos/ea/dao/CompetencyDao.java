@@ -1,6 +1,6 @@
 package com.kainos.ea.dao;
 
-import com.kainos.ea.exception.CompetencyPerBandLvlNotExistException;
+import com.kainos.ea.exception.BandNotExistException;
 import com.kainos.ea.model.BandCompetencies;
 
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import java.util.List;
 public class CompetencyDao {
     public CompetencyDao(){
     }
-    public List<BandCompetencies> getAllCompetencyPerBandLvl(Connection c, int role_id) throws SQLException, CompetencyPerBandLvlNotExistException {
+    public BandCompetencies getAllCompetencyPerBandLvl(Connection c, int band_id) throws SQLException, BandNotExistException {
 
         try{
             Statement st = c.createStatement();
@@ -26,8 +26,7 @@ public class CompetencyDao {
                     "        JOIN\n" +
                     "    competency ON competency_id = competency.id\n" +
                     "WHERE\n" +
-                    "    band.id = " + role_id );
-            List<BandCompetencies> bandCompetencies = new ArrayList<>();
+                    "    band.id = " + band_id );
             List<String> competencyBandNames= new ArrayList<>();
             String bandName = null;
             int bandLevel = 0;
@@ -42,12 +41,11 @@ public class CompetencyDao {
                         bandLevel,
                         bandName,
                         competencyBandNames);
-                bandCompetencies.add(bandLvls);
 
 
             if(competencyBandNames.isEmpty()){
-                throw new CompetencyPerBandLvlNotExistException("competencies not found");
-            } else return bandCompetencies;
+                throw new BandNotExistException("competencies not found");
+            } else return bandLvls;
 
         } catch (SQLException e) {
             throw new SQLException ("Select query for competency per band level is incorrect");

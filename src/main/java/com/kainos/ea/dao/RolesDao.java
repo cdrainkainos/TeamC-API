@@ -65,7 +65,6 @@ public class RolesDao {
         return null;
     }
 
-    //TODO: what to return with update ?
     public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException{
 
         String updateQuery = "UPDATE job_role SET" +
@@ -102,7 +101,6 @@ public class RolesDao {
         return recordId;
     }
 
-
     public JobSpecification getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {
 
         try{
@@ -125,4 +123,3 @@ public class RolesDao {
         }
     }
 }
-

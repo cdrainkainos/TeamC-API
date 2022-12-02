@@ -10,7 +10,6 @@ public class FamilyDao {
     public FamilyDao(){
     }
 
-    //TODO: what to return with update ?
     public int updateJobFamilyCapability(JobFamily jobFamily, Connection c) throws SQLException{
 
         String updateQuery = "UPDATE job_family " +
@@ -38,8 +37,6 @@ public class FamilyDao {
         }
         return famId;
     }
-
-
 
     public JobFamily getFamilyById(int familyID, Connection c) throws SQLException {
 

@@ -143,7 +143,6 @@ public class WebService {
         }
     }
 
-    //TODO: PUT data validation,  remove e.printStackTrace
     @PUT
     @Path("/job-families")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -153,7 +152,6 @@ public class WebService {
             int id = familiesService.updateJobFamily(jobFamily);
             return Response.status(HttpStatus.OK_200).entity(id).build();
         } catch (Exception | DatabaseConnectionException e) {
-            e.printStackTrace();
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

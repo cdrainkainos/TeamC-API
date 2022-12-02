@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,19 +75,13 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getCompetencyPerBand_shouldReturnListOfCompetencies_withFieldsNotNull() {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode response = APP.client().target("http://localhost:8080/api/competencies/1")
+    void getCompetencyPerBand_shouldReturnCompetencies_withFieldsNotNull() {
+        BandCompetencies response = APP.client().target("http://localhost:8080/api/competencies/1")
                 .request()
-                .get(JsonNode.class);
-        List<BandCompetencies> BandCompetencies = mapper.convertValue(
-                response, new TypeReference<List<BandCompetencies>>(){}
-        );
-
-        assertTrue(BandCompetencies.size() > 0);
-        assertNotNull(BandCompetencies.get(0).getBandLvl());
-        assertNotNull(BandCompetencies.get(0).getBandName());
-        assertNotNull(BandCompetencies.get(0).getCompetencyName());
+                .get(BandCompetencies.class);
+        assertNotNull(response.getBandLvl());
+        assertNotNull(response.getBandName());
+        assertNotNull(response.getCompetencyName());
     }
 
     @Test

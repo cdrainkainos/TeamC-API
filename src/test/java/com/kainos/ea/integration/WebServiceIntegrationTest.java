@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.kainos.ea.model.BandCompetencies;
 import com.kainos.ea.model.JobSpecification;
 
 import com.kainos.ea.trueApplication;
@@ -16,9 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +46,7 @@ public class WebServiceIntegrationTest {
         Assertions.assertEquals(response.getJobSpecification(), jTest.getJobSpecification());
         Assertions.assertEquals(response.getJobSpecificationLink(), jTest.getJobSpecificationLink());
     }
-    
+
     @Test
     void getSpecificationByNegativeId_shouldReturn404Exception() {
         int id = -1;
@@ -74,4 +74,24 @@ public class WebServiceIntegrationTest {
         assertNotNull(JobRoleList.get(0).getCapability_name());
     }
 
+    @Test
+    void getCompetencyPerBand_shouldReturnCompetencies_withFieldsNotNull() {
+        BandCompetencies response = APP.client().target("http://localhost:8080/api/competencies/1")
+                .request()
+                .get(BandCompetencies.class);
+        assertNotNull(response.getBandLvl());
+        assertNotNull(response.getBandName());
+        assertNotNull(response.getCompetencyName());
+    }
+
+    @Test
+    void getCompetenciesByNegativeId_shouldReturn404Exception() {
+        int id = -1;
+        Response response = APP.client().target("http://localhost:8080/api/competencies/"+ id)
+                .request()
+                .get();
+        Assertions.assertEquals(404, response.getStatus());
+    }
 }
+
+

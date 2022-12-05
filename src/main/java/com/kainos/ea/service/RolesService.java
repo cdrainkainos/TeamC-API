@@ -1,5 +1,4 @@
 package com.kainos.ea.service;
-
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;

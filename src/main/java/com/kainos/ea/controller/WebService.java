@@ -75,8 +75,8 @@ public class WebService {
         try{
             if (jobRoleValidator.isValidJobRole(jobRoleRequest)){
                 try {
-                    int returnedId = rolesService.updateJobRole(roleID, jobRoleRequest);
-                    return Response.status(HttpStatus.OK_200).entity(returnedId).build();
+                    boolean responseStatus = rolesService.updateJobRole(roleID, jobRoleRequest);
+                    return Response.status(HttpStatus.OK_200).entity(responseStatus).build();
                 } catch (Exception | DatabaseConnectionException e) {
                     return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
                 }

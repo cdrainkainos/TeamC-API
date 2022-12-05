@@ -64,7 +64,7 @@ public class RolesDao {
         return null;
     }
 
-    public int updateJobRole(int roleID, JobRoleRequest jobRoleRequest, Connection c) throws SQLException{
+    public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest, Connection c) throws SQLException{
 
         String updateQuery = "UPDATE job_role SET" +
                 " band_id = ?," +
@@ -88,17 +88,7 @@ public class RolesDao {
             throw new SQLException("Update failed, no rows affected.");
         }
 
-        int recordId;
-
-        try(ResultSet rs = prepStm.getGeneratedKeys()){
-            if (rs.next()){
-                recordId = rs.getInt(1);
-                System.out.println("recordID = " + recordId);
-            } else {
-                recordId = roleID;
-            }
-        }
-        return recordId;
+        return true;
     }
 
     public JobSpecification getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {

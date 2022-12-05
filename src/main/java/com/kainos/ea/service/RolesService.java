@@ -22,7 +22,7 @@ public class RolesService {
 
     }
 
-    public int updateJobRole(int roleID, JobRoleRequest jobRoleRequest) throws SQLException, DatabaseConnectionException, IOException {
+    public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest) throws SQLException, DatabaseConnectionException, IOException {
         return rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
     }
 

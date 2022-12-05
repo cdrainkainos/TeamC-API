@@ -120,7 +120,7 @@ class RolesServiceTest {
     }
 
     @Test
-    void updateJobRole_shouldReturnId_whenDaoReturnsId() throws SQLException, DatabaseConnectionException, IOException {
+    void updateJobRole_shouldReturnTrue_whenDaoReturnsTrue() throws SQLException, DatabaseConnectionException, IOException {
         int testID = 1;
         JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
@@ -131,9 +131,9 @@ class RolesServiceTest {
                 "Test job spec link"
         );
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(testID);
-        int result = rolesService.updateJobRole(testID, testJobRole);
+        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(true);
+        boolean result = rolesService.updateJobRole(testID, testJobRole);
 
-        assertEquals(result, testID);
+        assertTrue(result);
     }
 }

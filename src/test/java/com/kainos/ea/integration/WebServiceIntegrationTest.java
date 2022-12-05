@@ -1,6 +1,5 @@
 package com.kainos.ea.integration;
 
-
 import com.kainos.ea.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -89,43 +88,11 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getBandById_shouldReturnBand() {
-        Band response = APP.client().target("http://localhost:8080/api/bands/1")
-                .request()
-                .get(Band.class);
-        assertNotNull(response);
-    }
-
-    @Test
-    void getCapabilities_shouldReturnListOfCapabilities() {
-        List<Capability> response = APP.client().target("http://localhost:8080/api/capabilities")
-                .request()
-                .get(List.class);
-        assertTrue(response.size() > 0);
-    }
-
-    @Test
-    void getCapabilityById_shouldReturnCapability() {
-        Capability response = APP.client().target("http://localhost:8080/api/capabilities/1")
-                .request()
-                .get(Capability.class);
-        assertNotNull(response);
-    }
-
-    @Test
     void getFamilies_shouldReturnListOfCapabilities() {
         List<JobFamily> response = APP.client().target("http://localhost:8080/api/job-families")
                 .request()
                 .get(List.class);
         assertTrue(response.size() > 0);
-    }
-
-    @Test
-    void getFamilyById_shouldReturnFamily() {
-        JobFamily response = APP.client().target("http://localhost:8080/api/job-families/1")
-                .request()
-                .get(JobFamily.class);
-        assertNotNull(response);
     }
 
     @Test
@@ -139,7 +106,7 @@ public class WebServiceIntegrationTest {
                 "Test job specification",
                 "http://www.test.com"
         );
-        int response = APP.client().target("http://localhost:8080/api/job-roles")
+        int response = APP.client().target("http://localhost:8080/api/job-roles/" +testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE))
                 .readEntity(Integer.class);
@@ -149,6 +116,7 @@ public class WebServiceIntegrationTest {
 
     @Test
     void updateJobRole_shouldReturnError400_whenLinkDontMatchRegex() {
+        int testID = 1;
         JobRoleXL testJobRole = new JobRoleXL(
                 1,
                 2,
@@ -158,7 +126,7 @@ public class WebServiceIntegrationTest {
                 "/www.test.com"
         );
 
-        Response response = APP.client().target("http://localhost:8080/api/job-roles")
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
 
@@ -167,6 +135,7 @@ public class WebServiceIntegrationTest {
 
     @Test
     void updateJobRole_shouldReturnError400_whenNotValidData() {
+        int testID = 1;
         JobRoleXL testJobRole = new JobRoleXL(
                 1,
                 2,
@@ -176,11 +145,10 @@ public class WebServiceIntegrationTest {
                 "http://www.test.com"
         );
 
-        Response response = APP.client().target("http://localhost:8080/api/job-roles")
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
 
         Assertions.assertEquals(400, response.getStatus());
     }
-
 }

@@ -2,7 +2,6 @@ package com.kainos.ea.service;
 
 import com.kainos.ea.dao.BandsDao;
 import com.kainos.ea.database.DatabaseConnection;
-import com.kainos.ea.exception.BandDoesNotExistException;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.model.Band;
 
@@ -20,11 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BandsServiceTest {
     BandsDao bandsDao = Mockito.mock(BandsDao.class);
-
     DatabaseConnection databaseConnector = Mockito.mock(DatabaseConnection.class);
-
     BandsService bandsService = new BandsService(bandsDao, databaseConnector);
-
     Connection conn;
 
     @Test
@@ -43,32 +39,4 @@ public class BandsServiceTest {
         assertThrows(SQLException.class, () -> bandsService.getAllBands());
     }
 
-    @Test
-    void getBandById_shouldReturnBandWhenDaoReturnsBand() throws SQLException, DatabaseConnectionException, IOException, BandDoesNotExistException {
-        int testID = 1;
-        Band testBand = new Band(
-                1,
-                2,
-                "Test band"
-        );
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(bandsDao.getBandById(testID, conn)).thenReturn(testBand);
-        assertEquals(testBand, bandsService.getBandById(testID));
-    }
-
-    @Test
-    void getBandById_shouldThrowException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
-        int testID = 1;
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(bandsDao.getBandById(testID, conn)).thenThrow(SQLException.class);
-        assertThrows(SQLException.class, () -> bandsService.getBandById(testID));
-    }
-
-    @Test
-    void getRoleById_shouldThrowException_whenDaoReturnsNULL() throws SQLException, DatabaseConnectionException, IOException {
-        int testID = 1;
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(bandsDao.getBandById(testID, conn)).thenReturn(null);
-        assertThrows(BandDoesNotExistException.class, () -> bandsService.getBandById(testID));
-    }
 }

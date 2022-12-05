@@ -114,9 +114,9 @@ class RolesServiceTest {
                 "Test job spec link"
         );
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(rolesDao.updateJobRole(testJobRole, conn)).thenThrow(SQLException.class);
+        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenThrow(SQLException.class);
 
-        assertThrows(SQLException.class, ()-> rolesService.updateJobRole(testJobRole));
+        assertThrows(SQLException.class, ()-> rolesService.updateJobRole(testID, testJobRole));
     }
 
     @Test
@@ -131,14 +131,9 @@ class RolesServiceTest {
                 "Test job spec link"
         );
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(rolesDao.updateJobRole(testJobRole, conn)).thenReturn(testID);
-        int result = rolesService.updateJobRole(testJobRole);
+        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(testID);
+        int result = rolesService.updateJobRole(testID, testJobRole);
 
         assertEquals(result, testID);
     }
-
-
-
 }
-
-

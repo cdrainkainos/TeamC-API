@@ -1,13 +1,12 @@
 package com.kainos.ea.validator;
 
-import com.kainos.ea.exception.validation.LinkSyntaxException;
+import com.kainos.ea.exception.validation.UrlNotValidException;
 import com.kainos.ea.model.JobRoleXL;
-
 import java.util.regex.Pattern;
 
 public class JobRoleValidator {
 
-    public boolean isValidJobRole(JobRoleXL jobRoleXL) throws LinkSyntaxException {
+    public boolean isValidJobRole(JobRoleXL jobRoleXL) throws UrlNotValidException {
 
         if (jobRoleXL.getBandId() > 255 || jobRoleXL.getBandId()<=0){
             return false;
@@ -29,7 +28,7 @@ public class JobRoleValidator {
         Pattern pattern = Pattern.compile(linkRegex);
         if (!pattern.matcher(jobRoleXL.getJobSpecLink()).matches()){
             System.out.println(jobRoleXL.getJobSpecLink());
-            throw new LinkSyntaxException();
+            throw new UrlNotValidException("Provide valid URL");
         }
 
     return true;

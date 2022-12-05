@@ -1,16 +1,13 @@
 package com.kainos.ea.controller;
 
 import com.kainos.ea.dao.BandsDao;
-import com.kainos.ea.dao.CapabilityDao;
 import com.kainos.ea.dao.FamilyDao;
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.*;
-import com.kainos.ea.exception.validation.LinkSyntaxException;
-import com.kainos.ea.model.JobFamily;
+import com.kainos.ea.exception.validation.UrlNotValidException;
 import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.service.BandsService;
-import com.kainos.ea.service.CapabilitiesService;
 import com.kainos.ea.service.FamiliesService;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.RoleNotExistException;
@@ -18,7 +15,6 @@ import com.kainos.ea.service.RolesService;
 import com.kainos.ea.validator.JobRoleValidator;
 import io.swagger.annotations.*;
 import org.eclipse.jetty.http.HttpStatus;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,7 +27,6 @@ public class WebService {
     private static RolesService rolesService;
     private static BandsService bandsService;
     private static FamiliesService familiesService;
-    private static CapabilitiesService capabilitiesService;
 
     private static JobRoleValidator jobRoleValidator;
 
@@ -39,12 +34,10 @@ public class WebService {
         RolesDao rolesDao = new RolesDao();
         BandsDao bandsDao = new BandsDao();
         FamilyDao familyDao = new FamilyDao();
-        CapabilityDao capabilityDao = new CapabilityDao();
         DatabaseConnection databaseConnector = new DatabaseConnection();
         rolesService = new RolesService(rolesDao, databaseConnector);
         bandsService = new BandsService(bandsDao, databaseConnector);
         familiesService = new FamiliesService(familyDao, databaseConnector);
-        capabilitiesService = new CapabilitiesService(capabilityDao, databaseConnector);
         jobRoleValidator = new JobRoleValidator();
     }
 
@@ -67,44 +60,31 @@ public class WebService {
     public Response getJobRoleById(@PathParam("id") int id){
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getRoleById(id)).build();
-        } catch (Exception | DatabaseConnectionException  e){
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         } catch (JobRoleDoesNotExistException e){
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
+        } catch (Exception | DatabaseConnectionException  e){
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
 
     @PUT
-    @Path("/job-roles")
+    @Path("/job-roles/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateJobRole(JobRoleXL jobRoleXL){
+    public Response updateJobRole(@PathParam("id") int roleID,  JobRoleXL jobRoleXL){
         try{
             if (jobRoleValidator.isValidJobRole(jobRoleXL)){
                 try {
-                    int id = rolesService.updateJobRole(jobRoleXL);
-                    return Response.status(HttpStatus.OK_200).entity(id).build();
+                    int returnedId = rolesService.updateJobRole(roleID, jobRoleXL);
+                    return Response.status(HttpStatus.OK_200).entity(returnedId).build();
                 } catch (Exception | DatabaseConnectionException e) {
                     return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
                 }
             } else {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } catch (LinkSyntaxException e) {
+        } catch (UrlNotValidException e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).build();
-        }
-    }
-
-    @GET
-    @Path("/bands/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getBandById(@PathParam("id") int id){
-        try {
-            return Response.status(HttpStatus.OK_200).entity(bandsService.getBandById(id)).build();
-        } catch (Exception | DatabaseConnectionException  e){
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
-        } catch (BandDoesNotExistException e){
-            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         }
     }
 
@@ -120,61 +100,11 @@ public class WebService {
     }
 
     @GET
-    @Path("/job-families/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFamilyById(@PathParam("id") int id){
-        try {
-            return Response.status(HttpStatus.OK_200).entity(familiesService.getFamilyById(id)).build();
-        } catch (Exception | DatabaseConnectionException  e){
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
-        } catch (FamilyDoesNotExistException e){
-            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
-        }
-    }
-
-    @GET
     @Path("/job-families")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFamilies(){
         try{
             return Response.status(HttpStatus.OK_200).entity(familiesService.getAllFamilies()).build();
-        } catch (Exception | DatabaseConnectionException e) {
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
-        }
-    }
-
-    @PUT
-    @Path("/job-families")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateJobFamily(JobFamily jobFamily){
-        try {
-            int id = familiesService.updateJobFamily(jobFamily);
-            return Response.status(HttpStatus.OK_200).entity(id).build();
-        } catch (Exception | DatabaseConnectionException e) {
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
-        }
-    }
-
-    @GET
-    @Path("/capabilities/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCapabilityById(@PathParam("id") int id){
-        try {
-            return Response.status(HttpStatus.OK_200).entity(capabilitiesService.getCapabilityById(id)).build();
-        } catch (Exception | DatabaseConnectionException  e){
-            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
-        } catch (CapabilityDoesNotExistException e){
-            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
-        }
-    }
-
-    @GET
-    @Path("/capabilities")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCapabilities(){
-        try{
-            return Response.status(HttpStatus.OK_200).entity(capabilitiesService.getAllCapabilities()).build();
         } catch (Exception | DatabaseConnectionException e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }

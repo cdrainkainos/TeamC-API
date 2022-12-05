@@ -41,7 +41,6 @@ public class RolesDao {
         } catch (SQLException e) {
             throw new SQLException ("Error with sql statement");
         }
-
     }
 
     public JobRoleXL getRoleById(int roleID, Connection c) throws SQLException {
@@ -65,7 +64,7 @@ public class RolesDao {
         return null;
     }
 
-    public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException{
+    public int updateJobRole(int roleID, JobRoleXL jobRoleXL, Connection c) throws SQLException{
 
         String updateQuery = "UPDATE job_role SET" +
                 " band_id = ?," +
@@ -81,7 +80,7 @@ public class RolesDao {
         prepStm.setString(3, jobRoleXL.getRole_title());
         prepStm.setString(4, jobRoleXL.getJobSpecification());
         prepStm.setString(5, jobRoleXL.getJobSpecLink());
-        prepStm.setInt(6, jobRoleXL.getId());
+        prepStm.setInt(6, roleID);
 
         int affectedRows = prepStm.executeUpdate();
 
@@ -94,8 +93,9 @@ public class RolesDao {
         try(ResultSet rs = prepStm.getGeneratedKeys()){
             if (rs.next()){
                 recordId = rs.getInt(1);
+                System.out.println("recordID = " + recordId);
             } else {
-                recordId = jobRoleXL.getId();
+                recordId = roleID;
             }
         }
         return recordId;

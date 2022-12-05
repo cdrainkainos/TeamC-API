@@ -22,8 +22,8 @@ public class RolesService {
 
     }
 
-    public int updateJobRole(JobRoleXL jobRoleXL) throws SQLException, DatabaseConnectionException, IOException {
-        return rolesDao.updateJobRole(jobRoleXL, databaseConnector.getConnection());
+    public int updateJobRole(int roleID, JobRoleXL jobRoleXL) throws SQLException, DatabaseConnectionException, IOException {
+        return rolesDao.updateJobRole(roleID, jobRoleXL, databaseConnector.getConnection());
     }
 
     public List<JobRole> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {

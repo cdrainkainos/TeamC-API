@@ -3,8 +3,8 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
-import com.kainos.ea.model.JobRole;
-import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.model.JobRoleResponse;
+import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.model.JobSpecification;
 import java.io.IOException;
@@ -22,20 +22,20 @@ public class RolesService {
 
     }
 
-    public int updateJobRole(int roleID, JobRoleXL jobRoleXL) throws SQLException, DatabaseConnectionException, IOException {
-        return rolesDao.updateJobRole(roleID, jobRoleXL, databaseConnector.getConnection());
+    public int updateJobRole(int roleID, JobRoleRequest jobRoleRequest) throws SQLException, DatabaseConnectionException, IOException {
+        return rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
     }
 
-    public List<JobRole> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
+    public List<JobRoleResponse> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
         return rolesDao.getAllRoles(databaseConnector.getConnection());
     }
 
-    public JobRoleXL getRoleById(int roleID) throws DatabaseConnectionException, SQLException, IOException, JobRoleDoesNotExistException {
-        JobRoleXL jobRoleXL = rolesDao.getRoleById(roleID, databaseConnector.getConnection());
-        if (Objects.isNull(jobRoleXL)) {
+    public JobRoleRequest getRoleById(int roleID) throws DatabaseConnectionException, SQLException, IOException, JobRoleDoesNotExistException {
+        JobRoleRequest jobRoleRequest = rolesDao.getRoleById(roleID, databaseConnector.getConnection());
+        if (Objects.isNull(jobRoleRequest)) {
             throw new JobRoleDoesNotExistException();
         }
-        return jobRoleXL;
+        return jobRoleRequest;
     }
 
     public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {

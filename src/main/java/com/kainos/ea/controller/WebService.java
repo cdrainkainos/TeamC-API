@@ -6,7 +6,7 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.*;
 import com.kainos.ea.exception.validation.UrlNotValidException;
-import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.service.BandsService;
 import com.kainos.ea.service.FamiliesService;
 import com.kainos.ea.exception.DatabaseConnectionException;
@@ -71,11 +71,11 @@ public class WebService {
     @Path("/job-roles/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateJobRole(@PathParam("id") int roleID,  JobRoleXL jobRoleXL){
+    public Response updateJobRole(@PathParam("id") int roleID,  JobRoleRequest jobRoleRequest){
         try{
-            if (jobRoleValidator.isValidJobRole(jobRoleXL)){
+            if (jobRoleValidator.isValidJobRole(jobRoleRequest)){
                 try {
-                    int returnedId = rolesService.updateJobRole(roleID, jobRoleXL);
+                    int returnedId = rolesService.updateJobRole(roleID, jobRoleRequest);
                     return Response.status(HttpStatus.OK_200).entity(returnedId).build();
                 } catch (Exception | DatabaseConnectionException e) {
                     return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();

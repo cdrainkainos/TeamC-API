@@ -60,8 +60,8 @@ public class WebServiceIntegrationTest {
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
                 .get(JsonNode.class);
-        List<JobRole> JobRoleList = mapper.convertValue(
-                response, new TypeReference<List<JobRole>>(){}
+        List<JobRoleResponse> JobRoleList = mapper.convertValue(
+                response, new TypeReference<List<JobRoleResponse>>(){}
         );
 
         assertTrue(JobRoleList.size() > 0);
@@ -73,9 +73,9 @@ public class WebServiceIntegrationTest {
 
     @Test
     void getRoleById_shouldReturnJobRole() {
-        JobRoleXL response = APP.client().target("http://localhost:8080/api/job-roles/1")
+        JobRoleRequest response = APP.client().target("http://localhost:8080/api/job-roles/1")
                 .request()
-                .get(JobRoleXL.class);
+                .get(JobRoleRequest.class);
         assertNotNull(response);
     }
 
@@ -98,7 +98,7 @@ public class WebServiceIntegrationTest {
     @Test
     void updateJobRole_shouldReturnIdOfJobRole(){
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -117,7 +117,7 @@ public class WebServiceIntegrationTest {
     @Test
     void updateJobRole_shouldReturnError400_whenLinkDontMatchRegex() {
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -136,7 +136,7 @@ public class WebServiceIntegrationTest {
     @Test
     void updateJobRole_shouldReturnError400_whenNotValidData() {
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,

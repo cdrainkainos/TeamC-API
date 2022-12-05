@@ -4,8 +4,8 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
-import com.kainos.ea.model.JobRole;
-import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.model.JobRoleResponse;
+import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.model.JobSpecification;
 import org.junit.jupiter.api.Test;
@@ -30,10 +30,10 @@ class RolesServiceTest {
 
     @Test
     void getAllRoles_shouldReturnListOfRoles_whenDaoReturnsListOfRoles() throws SQLException, DatabaseConnectionException, IOException {
-        ArrayList<JobRole> role_list = new ArrayList<>();
+        ArrayList<JobRoleResponse> role_list = new ArrayList<>();
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenReturn(role_list);
-        List<JobRole> roles = rolesService.getAllRoles();
+        List<JobRoleResponse> roles = rolesService.getAllRoles();
         assertEquals(roles, role_list);
     }
 
@@ -47,7 +47,7 @@ class RolesServiceTest {
     @Test
     void getRoleById_shouldReturnJobRoleXLWhenDaoReturnsJobRoleXL() throws SQLException, DatabaseConnectionException, IOException, JobRoleDoesNotExistException {
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -105,7 +105,7 @@ class RolesServiceTest {
     @Test
     void updateJobRole_shouldThrowSqlException_whenDaoThrowsSqlException() throws SQLException, DatabaseConnectionException, IOException {
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -122,7 +122,7 @@ class RolesServiceTest {
     @Test
     void updateJobRole_shouldReturnId_whenDaoReturnsId() throws SQLException, DatabaseConnectionException, IOException {
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,

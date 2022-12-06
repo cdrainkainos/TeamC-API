@@ -42,4 +42,7 @@ public class RolesService {
         return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
 
     }
+    public int createJobRole(JobRoleRequest jobRoleReq) throws SQLException, DatabaseConnectionException, IOException {
+        return rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
+    }
 }

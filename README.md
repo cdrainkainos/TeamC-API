@@ -1,4 +1,5 @@
 # TeamC-API
+The project requires Java 11
 
 Database
 ---
@@ -6,7 +7,7 @@ Database
 
 Config
 ---
-1. Create an empty file called employeedb.properties in <directory_clone_was_ran>/TeamC-API/
+1. Create an empty file called employeedb.properties in root of the project
 2. The following environment variables need to be set to enable database connection:
 - host
 - user
@@ -14,7 +15,6 @@ Config
 - db
 
 How to start the java-dropwizard-swagger-jdbc application
-The project requires Java 11
 ---
 1. Run `mvn clean install -DskipTests=true` to build your application
 2. Start application with `java -jar target/JavaWebService-1.0-SNAPSHOT.jar server config.yml`

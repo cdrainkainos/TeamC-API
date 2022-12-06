@@ -113,4 +113,42 @@ public class JobRoleValidatorTest {
         );
         assertFalse(jobRoleValidator.isValidJobRole(testJobRoleRequest));
     }
+
+    @Test
+    public void isValidJobRole_shouldReturnFalse_whenJobSpecificationIsNULL() throws UrlNotValidException {
+        JobRoleRequest testJobRoleRequest = new JobRoleRequest(
+                1,
+                1,
+                2,
+                "test role title",
+                null,
+                "https://kainossoftwareltd.sharepoint.com/:w:/r/engineering/_layouts/15/Doc.aspx?sourcedoc=%7B17482B35-3A5B-41A7-A55A-70F5B45E0549%7D&file=Test%20Engineer%20(A).docx&action=default&mobileredirect=true"
+        );
+        assertFalse(jobRoleValidator.isValidJobRole(testJobRoleRequest));
+    }
+    @Test
+    public void isValidJobRole_shouldReturnFalse_whenRoleTitleIsNULL() throws UrlNotValidException {
+        JobRoleRequest testJobRoleRequest = new JobRoleRequest(
+                1,
+                1,
+                2,
+                null,
+                "test spec",
+                "https://kainossoftwareltd.sharepoint.com/:w:/r/engineering/_layouts/15/Doc.aspx?sourcedoc=%7B17482B35-3A5B-41A7-A55A-70F5B45E0549%7D&file=Test%20Engineer%20(A).docx&action=default&mobileredirect=true"
+        );
+        assertFalse(jobRoleValidator.isValidJobRole(testJobRoleRequest));
+    }
+
+    @Test
+    public void isValidJobRole_shouldReturnFalse_whenJobSpecLinkIsNULL() throws UrlNotValidException {
+        JobRoleRequest testJobRoleRequest = new JobRoleRequest(
+                1,
+                1,
+                2,
+                "test role title",
+                "test spec",
+                null
+        );
+        assertFalse(jobRoleValidator.isValidJobRole(testJobRoleRequest));
+    }
 }

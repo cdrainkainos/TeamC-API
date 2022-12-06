@@ -12,8 +12,11 @@ import com.kainos.ea.model.JobRoleXL;
 import com.kainos.ea.service.BandsService;
 import com.kainos.ea.service.CapabilitiesService;
 import com.kainos.ea.service.FamiliesService;
+import com.kainos.ea.dao.CompetencyDao;
+import com.kainos.ea.exception.BandNotExistException;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.RoleNotExistException;
+import com.kainos.ea.service.CompetencyService;
 import com.kainos.ea.service.RolesService;
 import com.kainos.ea.validator.JobRoleValidator;
 import io.swagger.annotations.*;
@@ -32,19 +35,21 @@ public class WebService {
     private static BandsService bandsService;
     private static FamiliesService familiesService;
     private static CapabilitiesService capabilitiesService;
-
+    private static CompetencyService competencyService;
     private static JobRoleValidator jobRoleValidator;
 
     public WebService(){
         RolesDao rolesDao = new RolesDao();
         BandsDao bandsDao = new BandsDao();
         FamilyDao familyDao = new FamilyDao();
+        CompetencyDao competencyDao = new CompetencyDao();
         CapabilityDao capabilityDao = new CapabilityDao();
         DatabaseConnection databaseConnector = new DatabaseConnection();
         rolesService = new RolesService(rolesDao, databaseConnector);
         bandsService = new BandsService(bandsDao, databaseConnector);
         familiesService = new FamiliesService(familyDao, databaseConnector);
         capabilitiesService = new CapabilitiesService(capabilityDao, databaseConnector);
+        competencyService = new CompetencyService(competencyDao, databaseConnector);
         jobRoleValidator = new JobRoleValidator();
     }
 
@@ -188,6 +193,19 @@ public class WebService {
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getAllSpecifications(role_id)).build();
         } catch (RoleNotExistException e){
+            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
+        } catch (DatabaseConnectionException | Exception e) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
+        }
+    }
+    @GET
+    @Path("/competencies/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBandCompetency(@PathParam("id") int band_id)
+    {
+        try {
+            return Response.status(HttpStatus.OK_200).entity(competencyService.getAllCompetencyPerBandLvl(band_id)).build();
+        } catch (BandNotExistException e){
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();

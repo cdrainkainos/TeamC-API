@@ -153,7 +153,6 @@ public class WebService {
                     int id = rolesService.createJobRole(jobRoleReq);
                     return Response.status(HttpStatus.CREATED_201).entity(id).build();
                 } catch (Exception | DatabaseConnectionException e) {
-                    e.printStackTrace();
                     return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
                 }
             } else {

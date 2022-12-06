@@ -8,6 +8,12 @@ public class JobRoleValidator {
 
     public boolean isValidJobRole(JobRoleRequest jobRoleRequest) throws UrlNotValidException {
 
+        if (jobRoleRequest.getRole_title() == null
+                || jobRoleRequest.getJobSpecification() == null
+                || jobRoleRequest.getJobSpecLink() == null){
+            return false;
+        }
+
         if (jobRoleRequest.getBandId() > 255 || jobRoleRequest.getBandId()<=0){
             return false;
         }
@@ -27,7 +33,6 @@ public class JobRoleValidator {
         String linkRegex = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$";
         Pattern pattern = Pattern.compile(linkRegex);
         if (!pattern.matcher(jobRoleRequest.getJobSpecLink()).matches()){
-            System.out.println(jobRoleRequest.getJobSpecLink());
             throw new UrlNotValidException("Provide valid URL");
         }
 

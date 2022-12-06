@@ -2,23 +2,14 @@ package com.kainos.ea.service;
 
 import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.exception.DatabaseConnectionException;
-
 import com.kainos.ea.database.DatabaseConnection;
+import com.kainos.ea.exception.JobRoleDoesNotExistException;
+import com.kainos.ea.model.JobRoleResponse;
+import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobSpecification;
-import com.kainos.ea.trueApplication;
-import com.kainos.ea.trueConfiguration;
-import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
-import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,10 +30,10 @@ class RolesServiceTest {
 
     @Test
     void getAllRoles_shouldReturnListOfRoles_whenDaoReturnsListOfRoles() throws SQLException, DatabaseConnectionException, IOException {
-        ArrayList<JobRole> role_list = new ArrayList<>();
+        ArrayList<JobRoleResponse> role_list = new ArrayList<>();
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenReturn(role_list);
-        List<JobRole> roles = rolesService.getAllRoles();
+        List<JobRoleResponse> roles = rolesService.getAllRoles();
         assertEquals(roles, role_list);
     }
 
@@ -51,6 +42,38 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> rolesService.getAllRoles());
+    }
+
+    @Test
+    void getRoleById_shouldReturnJobRoleRequestWhenDaoReturnsJobRoleRequest() throws SQLException, DatabaseConnectionException, IOException, JobRoleDoesNotExistException {
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "Test job spec link"
+        );
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.getRoleById(testID, conn)).thenReturn(testJobRole);
+        assertEquals(testJobRole, rolesService.getRoleById(testID));
+    }
+
+    @Test
+    void getRoleById_shouldThrowException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.getRoleById(testID, conn)).thenThrow(SQLException.class);
+        assertThrows(SQLException.class, () -> rolesService.getRoleById(testID));
+    }
+
+    @Test
+    void getRoleById_shouldThrowException_whenDaoReturnsNULL() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.getRoleById(testID, conn)).thenReturn(null);
+        assertThrows(JobRoleDoesNotExistException.class, () -> rolesService.getRoleById(testID));
     }
 
     @Test
@@ -78,6 +101,39 @@ class RolesServiceTest {
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(RoleNotExistException.class);
         assertThrows(RoleNotExistException.class, () -> rolesService.getAllSpecifications(role_id));
     }
+
+    @Test
+    void updateJobRole_shouldThrowSqlException_whenDaoThrowsSqlException() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "Test job spec link"
+        );
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenThrow(SQLException.class);
+
+        assertThrows(SQLException.class, ()-> rolesService.updateJobRole(testID, testJobRole));
+    }
+
+    @Test
+    void updateJobRole_shouldReturnTrue_whenDaoReturnsTrue() throws SQLException, DatabaseConnectionException, IOException {
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "http://www.test.com"
+        );
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(true);
+        boolean result = rolesService.updateJobRole(testID, testJobRole);
+
+        assertTrue(result);
+    }
 }
-
-

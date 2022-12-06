@@ -1,27 +1,26 @@
 package com.kainos.ea.integration;
 
+import com.kainos.ea.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.kainos.ea.model.BandCompetencies;
 import com.kainos.ea.model.JobSpecification;
-
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
-import com.kainos.ea.model.JobRole;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 public class WebServiceIntegrationTest {
@@ -30,7 +29,6 @@ public class WebServiceIntegrationTest {
             trueApplication.class, null,
             new ResourceConfigurationSourceProvider()
     );
-
 
 
     @Test
@@ -63,8 +61,8 @@ public class WebServiceIntegrationTest {
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
                 .get(JsonNode.class);
-        List<JobRole> JobRoleList = mapper.convertValue(
-                response, new TypeReference<List<JobRole>>(){}
+        List<JobRoleResponse> JobRoleList = mapper.convertValue(
+                response, new TypeReference<List<JobRoleResponse>>(){}
         );
 
         assertTrue(JobRoleList.size() > 0);
@@ -75,6 +73,87 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
+    void getRoleById_shouldReturnJobRole() {
+        JobRoleRequest response = APP.client().target("http://localhost:8080/api/job-roles/1")
+                .request()
+                .get(JobRoleRequest.class);
+        assertNotNull(response);
+    }
+
+    @Test
+    void getBands_shouldReturnListOfBands() {
+        List<Band> response = APP.client().target("http://localhost:8080/api/bands")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
+
+    @Test
+    void getFamilies_shouldReturnListOfCapabilities() {
+        List<JobFamily> response = APP.client().target("http://localhost:8080/api/job-families")
+                .request()
+                .get(List.class);
+        assertTrue(response.size() > 0);
+    }
+
+    @Test
+    void updateJobRole_shouldReturnTrue_whenSuccess(){
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "http://www.test.com"
+        );
+
+        boolean response = APP.client().target("http://localhost:8080/api/job-roles/" +testID)
+                .request()
+                .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE))
+                .readEntity(Boolean.class);
+
+        Assertions.assertTrue(response);
+    }
+
+    @Test
+    void updateJobRole_shouldReturnError400_whenLinkDontMatchRegex() {
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role title",
+                "Test job specification",
+                "/www.test.com"
+        );
+
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
+                .request()
+                .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
+
+        Assertions.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    void updateJobRole_shouldReturnError400_whenNotValidData() {
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
+                1,
+                2,
+                3,
+                "Test role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role titleest role title",
+                "Test job specification",
+                "http://www.test.com"
+        );
+
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
+                .request()
+                .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
+
+        Assertions.assertEquals(400, response.getStatus());
+    }
+
     void getCompetencyPerBand_shouldReturnCompetencies_withFieldsNotNull() {
         BandCompetencies response = APP.client().target("http://localhost:8080/api/competencies/1")
                 .request()
@@ -93,5 +172,3 @@ public class WebServiceIntegrationTest {
         Assertions.assertEquals(404, response.getStatus());
     }
 }
-
-

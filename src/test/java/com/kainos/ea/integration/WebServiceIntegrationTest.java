@@ -96,7 +96,7 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void updateJobRole_shouldReturnIdOfJobRole(){
+    void updateJobRole_shouldReturnTrue_whenSuccess(){
         int testID = 1;
         JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
@@ -106,12 +106,13 @@ public class WebServiceIntegrationTest {
                 "Test job specification",
                 "http://www.test.com"
         );
-        int response = APP.client().target("http://localhost:8080/api/job-roles/" +testID)
+
+        boolean response = APP.client().target("http://localhost:8080/api/job-roles/" +testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(Integer.class);
+                .readEntity(Boolean.class);
 
-        Assertions.assertEquals(testID, response);
+        Assertions.assertTrue(response);
     }
 
     @Test

@@ -45,7 +45,7 @@ class RolesServiceTest {
     }
 
     @Test
-    void getRoleById_shouldReturnJobRoleXLWhenDaoReturnsJobRoleXL() throws SQLException, DatabaseConnectionException, IOException, JobRoleDoesNotExistException {
+    void getRoleById_shouldReturnJobRoleRequestWhenDaoReturnsJobRoleRequest() throws SQLException, DatabaseConnectionException, IOException, JobRoleDoesNotExistException {
         int testID = 1;
         JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
@@ -128,7 +128,7 @@ class RolesServiceTest {
                 3,
                 "Test role title",
                 "Test job specification",
-                "Test job spec link"
+                "http://www.test.com"
         );
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(true);

@@ -114,4 +114,30 @@ public class RolesDao {
             throw new SQLException ("Select query for job specifications is incorrect");
         }
     }
+
+    public int createJobRole(JobRoleRequest jobRoleXL, Connection c) throws SQLException{
+
+        int newId = 0;
+        try {
+            String updateQuery = "INSERT INTO job_role (band_id, job_family_id, kainos_job_title, job_specification, job_spec_link) VALUES (?,?,?,?,?)";
+
+            PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
+            prepStm.setInt(1, jobRoleXL.getBandId());
+            prepStm.setInt(2, jobRoleXL.getJobFamilyId());
+            prepStm.setString(3, jobRoleXL.getRole_title());
+            prepStm.setString(4, jobRoleXL.getJobSpecification());
+            prepStm.setString(5, jobRoleXL.getJobSpecLink());
+
+            prepStm.execute();
+            ResultSet rs = prepStm.getGeneratedKeys();
+
+
+            while (rs.next()) {
+                newId = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return newId;
+    }
 }

@@ -141,4 +141,26 @@ public class WebService {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
+
+    @POST
+    @Path("/create-job-role")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createJobRole(JobRoleRequest jobRoleReq){
+        try{
+            if (jobRoleValidator.isValidJobRole(jobRoleReq)){
+                try {
+                    int id = rolesService.createJobRole(jobRoleReq);
+                    return Response.status(HttpStatus.CREATED_201).entity(id).build();
+                } catch (Exception | DatabaseConnectionException e) {
+                    e.printStackTrace();
+                    return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+                }
+            } else {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            }
+        } catch (UrlNotValidException e) {
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        }
+    }
 }

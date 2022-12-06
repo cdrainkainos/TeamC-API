@@ -3,7 +3,6 @@ package com.kainos.ea.service;
 import com.kainos.ea.dao.FamilyDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
-import com.kainos.ea.exception.FamilyDoesNotExistException;
 import com.kainos.ea.model.JobFamily;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,11 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FamiliesServiceTest {
     FamilyDao familyDao = Mockito.mock(FamilyDao.class);
-
     DatabaseConnection databaseConnector = Mockito.mock(DatabaseConnection.class);
-
     FamiliesService familiesService = new FamiliesService(familyDao, databaseConnector);
-
     Connection conn;
 
     @Test
@@ -42,32 +38,4 @@ public class FamiliesServiceTest {
         assertThrows(SQLException.class, () -> familiesService.getAllFamilies());
     }
 
-    @Test
-    void getFamilyById_shouldReturnFamilyWhenDaoReturnsFamily() throws SQLException, DatabaseConnectionException, IOException, FamilyDoesNotExistException {
-        int testID = 1;
-        JobFamily testEntry = new JobFamily(
-                1,
-                1,
-                "Test family"
-        );
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(familyDao.getFamilyById(testID, conn)).thenReturn(testEntry);
-        assertEquals(testEntry, familiesService.getFamilyById(testID));
-    }
-
-    @Test
-    void getFamilyById_shouldThrowException_whenDaoThrowsException() throws SQLException, DatabaseConnectionException, IOException {
-        int testID = 1;
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(familyDao.getFamilyById(testID, conn)).thenThrow(SQLException.class);
-        assertThrows(SQLException.class, () -> familiesService.getFamilyById(testID));
-    }
-
-    @Test
-    void getFamily_shouldThrowException_whenDaoReturnsNULL() throws SQLException, DatabaseConnectionException, IOException {
-        int testID = 1;
-        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(familyDao.getFamilyById(testID, conn)).thenReturn(null);
-        assertThrows(FamilyDoesNotExistException.class, () -> familiesService.getFamilyById(testID));
-    }
 }

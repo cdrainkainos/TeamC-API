@@ -1,6 +1,6 @@
 package com.kainos.ea.dao;
-import com.kainos.ea.model.JobRole;
-import com.kainos.ea.model.JobRoleXL;
+import com.kainos.ea.model.JobRoleResponse;
+import com.kainos.ea.model.JobRoleRequest;
 import java.sql.*;
 import com.kainos.ea.exception.RoleNotExistException;
 import com.kainos.ea.model.JobSpecification;
@@ -15,7 +15,7 @@ public class RolesDao {
     public RolesDao(){
     }
 
-    public List<JobRole> getAllRoles(Connection c) throws SQLException {
+    public List<JobRoleResponse> getAllRoles(Connection c) throws SQLException {
         try {
             Statement st = c.createStatement();
 
@@ -28,10 +28,10 @@ public class RolesDao {
                     "ON job_role.band_id=band.id " +
                     "ORDER BY job_role.id;");
 
-            List<JobRole> jobRoles = new ArrayList<>();
+            List<JobRoleResponse> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                JobRole role = new JobRole(
+                JobRoleResponse role = new JobRoleResponse(
                         rs.getInt("id"),
                         rs.getString("kainos_job_title"),
                         rs.getString("band_name"),
@@ -43,10 +43,9 @@ public class RolesDao {
         } catch (SQLException e) {
             throw new SQLException ("Error with sql statement");
         }
-
     }
 
-    public JobRoleXL getRoleById(int roleID, Connection c) throws SQLException {
+    public JobRoleRequest getRoleById(int roleID, Connection c) throws SQLException {
 
         String query = String.format("SELECT band_id, job_family_id, kainos_job_title, job_specification, job_spec_link" +
                 " FROM job_role WHERE id = %d", roleID);
@@ -54,7 +53,7 @@ public class RolesDao {
         ResultSet resultSet = st.executeQuery(query);
 
         if (resultSet.next()){
-            JobRoleXL jobRoleXL = new JobRoleXL(
+            JobRoleRequest jobRoleRequest = new JobRoleRequest(
                     roleID,
                     resultSet.getInt("band_id"),
                     resultSet.getInt("job_family_id"),
@@ -62,12 +61,12 @@ public class RolesDao {
                     resultSet.getString("job_specification"),
                     resultSet.getString("job_spec_link")
             );
-            return jobRoleXL;
+            return jobRoleRequest;
         }
         return null;
     }
 
-    public int updateJobRole(JobRoleXL jobRoleXL, Connection c) throws SQLException{
+    public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest, Connection c) throws SQLException{
 
         String updateQuery = "UPDATE job_role SET" +
                 " band_id = ?," +
@@ -78,12 +77,12 @@ public class RolesDao {
                 "WHERE id = ?";
 
         PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
-        prepStm.setInt(1, jobRoleXL.getBandId());
-        prepStm.setInt(2, jobRoleXL.getJobFamilyId());
-        prepStm.setString(3, jobRoleXL.getRole_title());
-        prepStm.setString(4, jobRoleXL.getJobSpecification());
-        prepStm.setString(5, jobRoleXL.getJobSpecLink());
-        prepStm.setInt(6, jobRoleXL.getId());
+        prepStm.setInt(1, jobRoleRequest.getBandId());
+        prepStm.setInt(2, jobRoleRequest.getJobFamilyId());
+        prepStm.setString(3, jobRoleRequest.getRole_title());
+        prepStm.setString(4, jobRoleRequest.getJobSpecification());
+        prepStm.setString(5, jobRoleRequest.getJobSpecLink());
+        prepStm.setInt(6, roleID);
 
         int affectedRows = prepStm.executeUpdate();
 
@@ -91,16 +90,7 @@ public class RolesDao {
             throw new SQLException("Update failed, no rows affected.");
         }
 
-        int recordId;
-
-        try(ResultSet rs = prepStm.getGeneratedKeys()){
-            if (rs.next()){
-                recordId = rs.getInt(1);
-            } else {
-                recordId = jobRoleXL.getId();
-            }
-        }
-        return recordId;
+        return true;
     }
 
     public JobSpecification getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {

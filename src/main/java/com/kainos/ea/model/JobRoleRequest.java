@@ -3,7 +3,7 @@ package com.kainos.ea.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JobRoleXL {
+public class JobRoleRequest {
 
     private int id;
     private int bandId;
@@ -13,7 +13,7 @@ public class JobRoleXL {
     private String jobSpecLink;
 
     @JsonCreator
-    public JobRoleXL(
+    public JobRoleRequest(
             @JsonProperty("id") int id,
             @JsonProperty("band_id") int bandId,
             @JsonProperty("job_family_id") int jobFamilyId,

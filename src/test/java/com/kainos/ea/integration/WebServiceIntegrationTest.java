@@ -1,6 +1,5 @@
 package com.kainos.ea.integration;
 
-
 import com.kainos.ea.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -62,8 +61,8 @@ public class WebServiceIntegrationTest {
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
                 .request()
                 .get(JsonNode.class);
-        List<JobRole> JobRoleList = mapper.convertValue(
-                response, new TypeReference<List<JobRole>>(){}
+        List<JobRoleResponse> JobRoleList = mapper.convertValue(
+                response, new TypeReference<List<JobRoleResponse>>(){}
         );
 
         assertTrue(JobRoleList.size() > 0);
@@ -75,9 +74,9 @@ public class WebServiceIntegrationTest {
 
     @Test
     void getRoleById_shouldReturnJobRole() {
-        JobRoleXL response = APP.client().target("http://localhost:8080/api/job-roles/1")
+        JobRoleRequest response = APP.client().target("http://localhost:8080/api/job-roles/1")
                 .request()
-                .get(JobRoleXL.class);
+                .get(JobRoleRequest.class);
         assertNotNull(response);
     }
 
@@ -90,30 +89,6 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getBandById_shouldReturnBand() {
-        Band response = APP.client().target("http://localhost:8080/api/bands/1")
-                .request()
-                .get(Band.class);
-        assertNotNull(response);
-    }
-
-    @Test
-    void getCapabilities_shouldReturnListOfCapabilities() {
-        List<Capability> response = APP.client().target("http://localhost:8080/api/capabilities")
-                .request()
-                .get(List.class);
-        assertTrue(response.size() > 0);
-    }
-
-    @Test
-    void getCapabilityById_shouldReturnCapability() {
-        Capability response = APP.client().target("http://localhost:8080/api/capabilities/1")
-                .request()
-                .get(Capability.class);
-        assertNotNull(response);
-    }
-
-    @Test
     void getFamilies_shouldReturnListOfCapabilities() {
         List<JobFamily> response = APP.client().target("http://localhost:8080/api/job-families")
                 .request()
@@ -122,17 +97,9 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void getFamilyById_shouldReturnFamily() {
-        JobFamily response = APP.client().target("http://localhost:8080/api/job-families/1")
-                .request()
-                .get(JobFamily.class);
-        assertNotNull(response);
-    }
-
-    @Test
-    void updateJobRole_shouldReturnIdOfJobRole(){
+    void updateJobRole_shouldReturnTrue_whenSuccess(){
         int testID = 1;
-        JobRoleXL testJobRole = new JobRoleXL(
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -140,17 +107,19 @@ public class WebServiceIntegrationTest {
                 "Test job specification",
                 "http://www.test.com"
         );
-        int response = APP.client().target("http://localhost:8080/api/job-roles")
+
+        boolean response = APP.client().target("http://localhost:8080/api/job-roles/" +testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(Integer.class);
+                .readEntity(Boolean.class);
 
-        Assertions.assertEquals(testID, response);
+        Assertions.assertTrue(response);
     }
 
     @Test
     void updateJobRole_shouldReturnError400_whenLinkDontMatchRegex() {
-        JobRoleXL testJobRole = new JobRoleXL(
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -159,7 +128,7 @@ public class WebServiceIntegrationTest {
                 "/www.test.com"
         );
 
-        Response response = APP.client().target("http://localhost:8080/api/job-roles")
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
 
@@ -168,7 +137,8 @@ public class WebServiceIntegrationTest {
 
     @Test
     void updateJobRole_shouldReturnError400_whenNotValidData() {
-        JobRoleXL testJobRole = new JobRoleXL(
+        int testID = 1;
+        JobRoleRequest testJobRole = new JobRoleRequest(
                 1,
                 2,
                 3,
@@ -177,7 +147,7 @@ public class WebServiceIntegrationTest {
                 "http://www.test.com"
         );
 
-        Response response = APP.client().target("http://localhost:8080/api/job-roles")
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + testID)
                 .request()
                 .put(Entity.entity(testJobRole, MediaType.APPLICATION_JSON_TYPE));
 
@@ -202,5 +172,3 @@ public class WebServiceIntegrationTest {
         Assertions.assertEquals(404, response.getStatus());
     }
 }
-
-

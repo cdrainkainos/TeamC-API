@@ -28,6 +28,7 @@ public class RolesDao {
                     "ON job_role.band_id=band.id " +
                     "ORDER BY job_role.id;");
 
+            c.close();
             List<JobRoleResponse> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
@@ -41,6 +42,7 @@ public class RolesDao {
             }
             return jobRoles;
         } catch (SQLException e) {
+            c.close();
             throw new SQLException ("Error with sql statement");
         }
     }
@@ -51,6 +53,7 @@ public class RolesDao {
                 " FROM job_role WHERE id = %d", roleID);
         Statement st = c.createStatement();
         ResultSet resultSet = st.executeQuery(query);
+        c.close();
 
         if (resultSet.next()){
             JobRoleRequest jobRoleRequest = new JobRoleRequest(
@@ -85,6 +88,7 @@ public class RolesDao {
         prepStm.setInt(6, roleID);
 
         int affectedRows = prepStm.executeUpdate();
+        c.close();
 
         if (affectedRows == 0){
             throw new SQLException("Update failed, no rows affected.");
@@ -99,6 +103,7 @@ public class RolesDao {
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT kainos_job_title, job_specification, job_spec_link  FROM job_role Where id =" +role_id );
             JobSpecification jobSpecification = null;
+            c.close();
             while (rs.next()) {
                  jobSpecification = new JobSpecification(
                         rs.getString("kainos_job_title"),
@@ -109,8 +114,8 @@ public class RolesDao {
                 throw new RoleNotExistException("Select record that is not empty");
             } else return jobSpecification;
 
-
         } catch (SQLException e) {
+            c.close();
             throw new SQLException ("Select query for job specifications is incorrect");
         }
     }
@@ -129,13 +134,14 @@ public class RolesDao {
             prepStm.setString(5, newJob.getJobSpecLink());
 
             prepStm.execute();
+            c.close();
             ResultSet rs = prepStm.getGeneratedKeys();
-
 
             while (rs.next()) {
                 createdRoleId = rs.getInt(1);
             }
         } catch (SQLException e) {
+            c.close();
             System.out.println(e.getMessage());
         }
         return createdRoleId;

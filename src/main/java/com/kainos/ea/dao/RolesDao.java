@@ -1,9 +1,9 @@
 package com.kainos.ea.dao;
-
+import com.kainos.ea.model.JobRoleResponse;
+import com.kainos.ea.model.JobRoleRequest;
+import java.sql.*;
 import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.model.JobRole;
 import com.kainos.ea.model.JobSpecification;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,33 +15,84 @@ public class RolesDao {
     public RolesDao(){
     }
 
-    public List<JobRole> getAllRoles(Connection c) throws SQLException {
+    public List<JobRoleResponse> getAllRoles(Connection c) throws SQLException {
         try {
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT job_role.id, job_role.kainos_job_title, capability.capability_name, band.band_name\n" +
+
+            ResultSet rs = st.executeQuery("SELECT job_role.id, job_role.band_id, job_role.kainos_job_title, capability.capability_name, band.band_name\n" +
                     "FROM job_role JOIN job_family\n" +
                     "ON (job_role.job_family_id = job_family.id)\n" +
                     "JOIN capability " +
                     "ON (job_family.capability_id = capability.id)" +
                     "JOIN band " +
-                    "ON job_role.band_id=band.id;");
+                    "ON job_role.band_id=band.id " +
+                    "ORDER BY job_role.id;");
 
-            List<JobRole> jobRoles = new ArrayList<>();
+            List<JobRoleResponse> jobRoles = new ArrayList<>();
 
             while (rs.next()) {
-                JobRole role = new JobRole(
+                JobRoleResponse role = new JobRoleResponse(
                         rs.getInt("id"),
                         rs.getString("kainos_job_title"),
-                        rs.getString("capability_name"),
-                        rs.getString("band_name"));
+                        rs.getString("band_name"),
+                        rs.getInt("band_id"),
+                        rs.getString("capability_name"));
                 jobRoles.add(role);
             }
             return jobRoles;
         } catch (SQLException e) {
             throw new SQLException ("Error with sql statement");
         }
-
     }
+
+    public JobRoleRequest getRoleById(int roleID, Connection c) throws SQLException {
+
+        String query = String.format("SELECT band_id, job_family_id, kainos_job_title, job_specification, job_spec_link" +
+                " FROM job_role WHERE id = %d", roleID);
+        Statement st = c.createStatement();
+        ResultSet resultSet = st.executeQuery(query);
+
+        if (resultSet.next()){
+            JobRoleRequest jobRoleRequest = new JobRoleRequest(
+                    roleID,
+                    resultSet.getInt("band_id"),
+                    resultSet.getInt("job_family_id"),
+                    resultSet.getString("kainos_job_title"),
+                    resultSet.getString("job_specification"),
+                    resultSet.getString("job_spec_link")
+            );
+            return jobRoleRequest;
+        }
+        return null;
+    }
+
+    public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest, Connection c) throws SQLException{
+
+        String updateQuery = "UPDATE job_role SET" +
+                " band_id = ?," +
+                " job_family_id = ?," +
+                " kainos_job_title = ?," +
+                " job_specification = ?, " +
+                " job_spec_link = ? " +
+                "WHERE id = ?";
+
+        PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
+        prepStm.setInt(1, jobRoleRequest.getBandId());
+        prepStm.setInt(2, jobRoleRequest.getJobFamilyId());
+        prepStm.setString(3, jobRoleRequest.getRole_title());
+        prepStm.setString(4, jobRoleRequest.getJobSpecification());
+        prepStm.setString(5, jobRoleRequest.getJobSpecLink());
+        prepStm.setInt(6, roleID);
+
+        int affectedRows = prepStm.executeUpdate();
+
+        if (affectedRows == 0){
+            throw new SQLException("Update failed, no rows affected.");
+        }
+
+        return true;
+    }
+
     public JobSpecification getAllSpecification(Connection c, int role_id) throws SQLException, RoleNotExistException {
 
         try{
@@ -63,5 +114,30 @@ public class RolesDao {
             throw new SQLException ("Select query for job specifications is incorrect");
         }
     }
-}
 
+    public int createJobRole(JobRoleRequest newJob, Connection c) throws SQLException{
+
+        int createdRoleId = 0;
+        try {
+            String updateQuery = "INSERT INTO job_role (band_id, job_family_id, kainos_job_title, job_specification, job_spec_link) VALUES (?,?,?,?,?)";
+
+            PreparedStatement prepStm = c.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS);
+            prepStm.setInt(1, newJob.getBandId());
+            prepStm.setInt(2, newJob.getJobFamilyId());
+            prepStm.setString(3, newJob.getRole_title());
+            prepStm.setString(4, newJob.getJobSpecification());
+            prepStm.setString(5, newJob.getJobSpecLink());
+
+            prepStm.execute();
+            ResultSet rs = prepStm.getGeneratedKeys();
+
+
+            while (rs.next()) {
+                createdRoleId = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return createdRoleId;
+    }
+}

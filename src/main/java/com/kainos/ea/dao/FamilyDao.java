@@ -15,7 +15,6 @@ public class FamilyDao {
         String query = "SELECT * FROM job_family";
         Statement st = c.createStatement();
         ResultSet resultSet = st.executeQuery(query);
-        c.close();
 
         List<JobFamily> jobFamilies = new ArrayList<>();
 

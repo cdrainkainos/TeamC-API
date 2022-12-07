@@ -27,7 +27,6 @@ public class CompetencyDao {
                     "    competency ON competency_id = competency.id\n" +
                     "WHERE\n" +
                     "    band.id = " + band_id );
-            c.close();
             List<String> competencyBandNames= new ArrayList<>();
             String bandName = null;
             int bandLevel = 0;
@@ -49,7 +48,6 @@ public class CompetencyDao {
             } else return bandLvls;
 
         } catch (SQLException e) {
-            c.close();
             throw new SQLException ("Select query for competency per band level is incorrect");
         }
     }

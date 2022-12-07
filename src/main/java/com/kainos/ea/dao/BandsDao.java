@@ -18,7 +18,6 @@ public class BandsDao {
         String query = "SELECT * FROM band";
         Statement st = c.createStatement();
         ResultSet resultSet = st.executeQuery(query);
-        c.close();
 
         List<Band> bands = new ArrayList<>();
 

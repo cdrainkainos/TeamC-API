@@ -21,6 +21,8 @@ import org.eclipse.jetty.http.HttpStatus;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Api("Team C Sprint")
 @Path("/api")
@@ -33,7 +35,7 @@ public class WebService {
     private static CompetencyService competencyService;
     private static JobRoleValidator jobRoleValidator;
 
-    public WebService(){
+    public WebService() {
         RolesDao rolesDao = new RolesDao();
         BandsDao bandsDao = new BandsDao();
         FamilyDao familyDao = new FamilyDao();
@@ -49,8 +51,7 @@ public class WebService {
     @GET
     @Path("/job-roles")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobRoles()
-    {
+    public Response getJobRoles() {
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getAllRoles()).build();
         } catch (Exception | DatabaseConnectionException e) {
@@ -62,12 +63,12 @@ public class WebService {
     @GET
     @Path("/job-roles/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobRoleById(@PathParam("id") int id){
+    public Response getJobRoleById(@PathParam("id") int id) {
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getRoleById(id)).build();
-        } catch (JobRoleDoesNotExistException e){
+        } catch (JobRoleDoesNotExistException e) {
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
-        } catch (Exception | DatabaseConnectionException  e){
+        } catch (Exception | DatabaseConnectionException e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
@@ -76,9 +77,9 @@ public class WebService {
     @Path("/job-roles/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateJobRole(@PathParam("id") int roleID,  JobRoleRequest jobRoleRequest){
-        try{
-            if (jobRoleValidator.isValidJobRole(jobRoleRequest)){
+    public Response updateJobRole(@PathParam("id") int roleID, JobRoleRequest jobRoleRequest) {
+        try {
+            if (jobRoleValidator.isValidJobRole(jobRoleRequest)) {
                 try {
                     boolean responseStatus = rolesService.updateJobRole(roleID, jobRoleRequest);
                     return Response.status(HttpStatus.OK_200).entity(responseStatus).build();
@@ -96,8 +97,8 @@ public class WebService {
     @GET
     @Path("/bands")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBands(){
-        try{
+    public Response getBands() {
+        try {
             return Response.status(HttpStatus.OK_200).entity(bandsService.getAllBands()).build();
         } catch (Exception | DatabaseConnectionException e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
@@ -107,8 +108,8 @@ public class WebService {
     @GET
     @Path("/job-families")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFamilies(){
-        try{
+    public Response getFamilies() {
+        try {
             return Response.status(HttpStatus.OK_200).entity(familiesService.getAllFamilies()).build();
         } catch (Exception | DatabaseConnectionException e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
@@ -118,24 +119,23 @@ public class WebService {
     @GET
     @Path("/job-specification/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobSpecification(@PathParam("id") int role_id)
-    {
+    public Response getJobSpecification(@PathParam("id") int role_id) {
         try {
             return Response.status(HttpStatus.OK_200).entity(rolesService.getAllSpecifications(role_id)).build();
-        } catch (RoleNotExistException e){
+        } catch (RoleNotExistException e) {
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
+
     @GET
     @Path("/competencies/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBandCompetency(@PathParam("id") int band_id)
-    {
+    public Response getBandCompetency(@PathParam("id") int band_id) {
         try {
             return Response.status(HttpStatus.OK_200).entity(competencyService.getAllCompetencyPerBandLvl(band_id)).build();
-        } catch (BandNotExistException e){
+        } catch (BandNotExistException e) {
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
@@ -146,9 +146,9 @@ public class WebService {
     @Path("/create-job-role")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createJobRole(JobRoleRequest jobRoleReq){
-        try{
-            if (jobRoleValidator.isValidJobRole(jobRoleReq)){
+    public Response createJobRole(JobRoleRequest jobRoleReq) {
+        try {
+            if (jobRoleValidator.isValidJobRole(jobRoleReq)) {
                 try {
                     int id = rolesService.createJobRole(jobRoleReq);
                     return Response.status(HttpStatus.CREATED_201).entity(id).build();
@@ -160,6 +160,19 @@ public class WebService {
             }
         } catch (UrlNotValidException e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        }
+    }
+
+    @DELETE
+    @Path("/job-roles/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteRole(@PathParam("id") int role_id) {
+        try {
+            return Response.status(HttpStatus.OK_200).entity(rolesService.deleteJobRole(role_id)).build();
+        } catch (DatabaseConnectionException | SQLException | IOException e) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
+        } catch (RoleNotExistException e) {
+            return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         }
     }
 }

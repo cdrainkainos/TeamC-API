@@ -4,6 +4,7 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
+import com.kainos.ea.exception.PrepareStatementException;
 import com.kainos.ea.model.JobRoleResponse;
 import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.exception.RoleNotExistException;
@@ -144,4 +145,29 @@ class RolesServiceTest {
         assertTrue(result);
         databaseConnector.closeConnection();
     }
+
+    @Test
+    void deleteJobRole_shouldReturnTrue_WhenARoleIsSuccessfullyDeleted() throws DatabaseConnectionException, SQLException, IOException, RoleNotExistException {
+        int role_id = 30;
+        Boolean success = true;
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.deleteRole(conn, role_id)).thenReturn(success);
+        assertTrue(success);
+    }
+
+    @Test
+    void deleteJobRole_shouldThrowRoleNotExistException_WhenRoleDoesNotExist() throws DatabaseConnectionException, SQLException, IOException, RoleNotExistException {
+        int role_id = -1;
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.deleteRole(conn, role_id)).thenThrow(RoleNotExistException.class);
+        assertThrows(RoleNotExistException.class, () -> rolesService.deleteJobRole(role_id));
+    }
+
+    @Test
+    void deleteJobRole_shouldThrowSQLException_WhenDaoThrowsSQLException() throws DatabaseConnectionException, SQLException, IOException, RoleNotExistException {
+        Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
+        Mockito.when(rolesDao.deleteRole(conn, 1)).thenThrow(PrepareStatementException.class);
+        assertThrows(PrepareStatementException.class, () -> rolesService.deleteJobRole(1));
+    }
 }
+

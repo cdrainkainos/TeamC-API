@@ -3,6 +3,7 @@ import com.kainos.ea.dao.RolesDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.JobRoleDoesNotExistException;
+import com.kainos.ea.exception.PrepareStatementException;
 import com.kainos.ea.model.JobRoleResponse;
 import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.exception.RoleNotExistException;
@@ -16,7 +17,7 @@ public class RolesService {
     public RolesDao rolesDao;
     public DatabaseConnection databaseConnector;
 
-    public RolesService(RolesDao rolesDao, DatabaseConnection databaseConnector){
+    public RolesService(RolesDao rolesDao, DatabaseConnection databaseConnector) {
         this.rolesDao = rolesDao;
         this.databaseConnector = databaseConnector;
 
@@ -50,9 +51,17 @@ public class RolesService {
         return allSpecifications;
 
     }
+
     public int createJobRole(JobRoleRequest jobRoleReq) throws SQLException, DatabaseConnectionException, IOException {
         int newJobRoleID = rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
         databaseConnector.closeConnection();
         return newJobRoleID;
     }
+
+    public boolean deleteJobRole(int role_id) throws SQLException, PrepareStatementException, RoleNotExistException, DatabaseConnectionException, IOException {
+        boolean deleteRoleConfirmation = rolesDao.deleteRole(databaseConnector.getConnection(), role_id);
+        databaseConnector.closeConnection();
+        return deleteRoleConfirmation;
+    }
+
 }

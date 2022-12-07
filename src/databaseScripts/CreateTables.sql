@@ -38,16 +38,16 @@ CREATE TABLE IF NOT EXISTS job_family(
 );
 
 CREATE TABLE IF NOT EXISTS job_role(
-	id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     band_id TINYINT,
     job_family_id TINYINT,
-	kainos_job_title VARCHAR(35),
-	job_specification VARCHAR(255),
-	job_spec_link VARCHAR(500),
+    kainos_job_title VARCHAR(35),
+    job_specification VARCHAR(255),
+    job_spec_link VARCHAR(500),
     FOREIGN KEY(band_id)
-		REFERENCES band(id),
-	FOREIGN KEY(job_family_id)
-		REFERENCES job_family(id)
+        REFERENCES band(id) ON DELETE CASCADE,
+    FOREIGN KEY(job_family_id)
+        REFERENCES job_family(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS training(
@@ -77,19 +77,19 @@ CREATE TABLE IF NOT EXISTS training_employee(
 );
 
 CREATE TABLE IF NOT EXISTS employee_fact(
-	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	employee_id SMALLINT,
-	job_role_id TINYINT,
-	hire_date DATE,
-	vacation_hours SMALLINT,
-	sick_leave_hours SMALLINT,
-	current_flag BIT,
-	rowgu_id VARCHAR(50),
-	salary DECIMAL(9,2),
-	location VARCHAR(15),
-	FOREIGN KEY(job_role_id)
-		REFERENCES job_role(id),
-	FOREIGN KEY(employee_id)
-		REFERENCES employee(id)
+    id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    employee_id SMALLINT,
+    job_role_id TINYINT,
+    hire_date DATE,
+    vacation_hours SMALLINT,
+    sick_leave_hours SMALLINT,
+    current_flag BIT,
+    rowgu_id VARCHAR(50),
+    salary DECIMAL(9,2),
+    location VARCHAR(15),
+    FOREIGN KEY(job_role_id)
+        REFERENCES job_role(id) ON DELETE CASCADE,
+    FOREIGN KEY(employee_id)
+        REFERENCES employee(id) ON DELETE CASCADE
 );
 

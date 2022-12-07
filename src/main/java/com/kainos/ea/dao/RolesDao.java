@@ -1,4 +1,5 @@
 package com.kainos.ea.dao;
+import com.kainos.ea.exception.PrepareStatementException;
 import com.kainos.ea.model.JobRoleResponse;
 import com.kainos.ea.model.JobRoleRequest;
 import java.sql.*;
@@ -112,6 +113,24 @@ public class RolesDao {
 
         } catch (SQLException e) {
             throw new SQLException ("Select query for job specifications is incorrect");
+        }
+    }
+
+    public boolean deleteRole(Connection c, int role_id) throws SQLException, RoleNotExistException {
+        String query = "DELETE FROM job_role WHERE job_role.id = ?;";
+
+        try {
+            Statement st = c.createStatement();
+            PreparedStatement preparedStmt = c.prepareStatement(query);
+            preparedStmt.setInt(1, role_id);
+            int rowsAffected = preparedStmt.executeUpdate();
+            if (rowsAffected != 0) {
+                return true;
+            } else {
+                throw new RoleNotExistException("Role does not exist");
+            }
+        } catch (SQLException e) {
+            throw new PrepareStatementException();
         }
     }
 

@@ -116,7 +116,7 @@ public class RolesDao {
         }
     }
 
-    public boolean deleteRole(Connection c, int role_id) throws PrepareStatementException, RoleNotExistException {
+    public boolean deleteRole(Connection c, int role_id) throws SQLException, RoleNotExistException {
         String query = "DELETE FROM job_role WHERE job_role.id = ?;";
 
         try {
@@ -124,12 +124,14 @@ public class RolesDao {
             PreparedStatement preparedStmt = c.prepareStatement(query);
             preparedStmt.setInt(1, role_id);
             int rowsAffected = preparedStmt.executeUpdate();
+            c.close();
             if (rowsAffected != 0) {
                 return true;
             } else {
                 throw new RoleNotExistException("Role does not exist");
             }
         } catch (SQLException e) {
+            c.close();
             throw new PrepareStatementException();
         }
     }

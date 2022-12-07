@@ -30,7 +30,6 @@ public class WebServiceIntegrationTest {
             new ResourceConfigurationSourceProvider()
     );
 
-
     @Test
     void getSpecificationById_shouldReturnResponseEqualToTestSpecification() {
         JobSpecification jTest = new JobSpecification(
@@ -55,7 +54,6 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-
     void getJobRoles_shouldReturnListOfJobRoles_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
@@ -173,12 +171,12 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-    void postJobRole_shouldReturnInsertionIdOfJobRole() {
+    void postJobRole_shouldReturnInsertionIdOfJobRole_deleteJobRole_shouldThenDeleteTheRole() {
         JobRoleRequest role = new JobRoleRequest(
                 1,
                 1,
-                100,
-                "test role title",
+                1,
+                "test role title - 2nd test",
                 "test job spec",
                 "https://kainossoftwareltd.sharepoint.com/:w:/r/engineering/_layouts/15/Doc.aspx?sourcedoc=%7B17482B35-3A5B-41A7-A55A-70F5B45E0549%7D&file=Test%20Engineer%20(A).docx&action=default&mobileredirect=true"
         );
@@ -188,5 +186,20 @@ public class WebServiceIntegrationTest {
                 .post(Entity.entity(role, MediaType.APPLICATION_JSON_TYPE))
                 .readEntity(Integer.class);
         Assertions.assertNotNull(response);
+
+        Response deleteResponse = APP.client().target("http://localhost:8080/api/job-roles/" + response)
+                .request()
+                .delete();
+            Assertions.assertEquals(200, deleteResponse.getStatus());
     }
+
+    @Test
+    void deleteJobRole_shouldReturn404Exception_whenIDDoesNotExistForRoleBeingDeleted(){
+        int id = -1;
+        Response response = APP.client().target("http://localhost:8080/api/job-roles/" + id)
+                .request()
+                .delete();
+        Assertions.assertEquals(404, response.getStatus());
+    }
+
 }

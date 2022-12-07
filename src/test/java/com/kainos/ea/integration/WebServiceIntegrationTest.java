@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.kainos.ea.model.JobSpecification;
 
+import com.kainos.ea.model.User;
 import com.kainos.ea.trueApplication;
 import com.kainos.ea.trueConfiguration;
 import com.kainos.ea.model.JobRole;
@@ -57,7 +58,6 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-
     void getJobRoles_shouldReturnListOfJobRoles_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
@@ -74,4 +74,15 @@ public class WebServiceIntegrationTest {
         assertNotNull(JobRoleList.get(0).getCapability_name());
     }
 
+    @Test
+    void register_shouldReturn201_whenUserRegisters() {
+        User user = new User(3, "testtest@test.com", "password", "Admin");
+
+        Response response = APP.client().target("http://localhost:8080/api/register")
+                .request()
+                .post(Entity.entity(user, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(response.getStatus(), 201);
+    }
 }
+

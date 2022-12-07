@@ -1,10 +1,14 @@
 package com.kainos.ea.controller;
 
 import com.kainos.ea.dao.RolesDao;
+import com.kainos.ea.dao.UserDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.DatabaseConnectionException;
 import com.kainos.ea.exception.RoleNotExistException;
+import com.kainos.ea.exception.UserAlreadyExistsException;
+import com.kainos.ea.model.User;
 import com.kainos.ea.service.RolesService;
+import com.kainos.ea.service.UserService;
 import io.swagger.annotations.*;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -18,11 +22,15 @@ import javax.ws.rs.core.Response;
 public class WebService {
 
     private static RolesService rolesService;
+    private static UserService userService;
 
     public WebService(){
         RolesDao rolesDao = new RolesDao();
+        UserDao userDao = new UserDao();
         DatabaseConnection databaseConnector = new DatabaseConnection();
         rolesService = new RolesService(rolesDao, databaseConnector);
+        userService = new UserService(userDao, databaseConnector);
+
     }
 
     @GET
@@ -49,6 +57,20 @@ public class WebService {
             return Response.status(HttpStatus.NOT_FOUND_404, e.getMessage()).build();
         } catch (DatabaseConnectionException | Exception e) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerUser(User user) throws DatabaseConnectionException, UserAlreadyExistsException {
+        try {
+            User user1 = userService.registerUser(user);
+            return Response.status(HttpStatus.CREATED_201).entity(user1).build();
+        } catch (Exception e) {
+            System.out.println(e);
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
 }

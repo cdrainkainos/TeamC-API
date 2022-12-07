@@ -32,6 +32,7 @@ public class CompetencyTestService {
         Mockito.when(competencyDao.getAllCompetencyPerBandLvl(conn, band_id)).thenReturn(bandCompetencies);
         BandCompetencies competencies = competencyService.getAllCompetencyPerBandLvl(band_id);
         assertEquals(competencies, bandCompetencies);
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -39,6 +40,7 @@ public class CompetencyTestService {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(competencyDao.getAllCompetencyPerBandLvl(conn, 1)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> competencyService.getAllCompetencyPerBandLvl(1));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -47,7 +49,7 @@ public class CompetencyTestService {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(competencyDao.getAllCompetencyPerBandLvl(conn, band_id)).thenThrow(BandNotExistException.class);
         assertThrows(BandNotExistException.class, () -> competencyDao.getAllCompetencyPerBandLvl(conn, band_id));
+        databaseConnector.closeConnection();
     }
-
 
 }

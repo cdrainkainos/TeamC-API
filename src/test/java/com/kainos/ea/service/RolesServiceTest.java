@@ -35,6 +35,7 @@ class RolesServiceTest {
         Mockito.when(rolesDao.getAllRoles(conn)).thenReturn(role_list);
         List<JobRoleResponse> roles = rolesService.getAllRoles();
         assertEquals(roles, role_list);
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -42,6 +43,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllRoles(conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> rolesService.getAllRoles());
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -58,6 +60,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getRoleById(testID, conn)).thenReturn(testJobRole);
         assertEquals(testJobRole, rolesService.getRoleById(testID));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -66,6 +69,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getRoleById(testID, conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> rolesService.getRoleById(testID));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -74,6 +78,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getRoleById(testID, conn)).thenReturn(null);
         assertThrows(JobRoleDoesNotExistException.class, () -> rolesService.getRoleById(testID));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -84,6 +89,7 @@ class RolesServiceTest {
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenReturn(specification_list);
         JobSpecification specifications = rolesService.getAllSpecifications(role_id);
         assertEquals(specifications, specification_list);
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -92,6 +98,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> rolesService.getAllSpecifications(role_id));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -100,6 +107,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.getAllSpecification(conn, role_id)).thenThrow(RoleNotExistException.class);
         assertThrows(RoleNotExistException.class, () -> rolesService.getAllSpecifications(role_id));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -115,8 +123,8 @@ class RolesServiceTest {
         );
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenThrow(SQLException.class);
-
         assertThrows(SQLException.class, ()-> rolesService.updateJobRole(testID, testJobRole));
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -133,7 +141,7 @@ class RolesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(rolesDao.updateJobRole(testID, testJobRole, conn)).thenReturn(true);
         boolean result = rolesService.updateJobRole(testID, testJobRole);
-
         assertTrue(result);
+        databaseConnector.closeConnection();
     }
 }

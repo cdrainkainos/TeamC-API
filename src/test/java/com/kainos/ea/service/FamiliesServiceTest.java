@@ -29,6 +29,7 @@ public class FamiliesServiceTest {
         Mockito.when(familyDao.getAllFamilies(conn)).thenReturn(testList);
         List<JobFamily> families = familiesService.getAllFamilies();
         assertEquals(families, testList);
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -36,6 +37,7 @@ public class FamiliesServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(familyDao.getAllFamilies(conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> familiesService.getAllFamilies());
+        databaseConnector.closeConnection();
     }
 
 }

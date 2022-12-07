@@ -93,3 +93,10 @@ CREATE TABLE IF NOT EXISTS employee_fact(
 		REFERENCES employee(id)
 );
 
+CREATE TABLE IF NOT EXISTS users(
+	id smallint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(50),
+    password VARCHAR(100),
+    role VARCHAR (8)
+);
+

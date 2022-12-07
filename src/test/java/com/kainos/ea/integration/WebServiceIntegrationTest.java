@@ -55,7 +55,6 @@ public class WebServiceIntegrationTest {
     }
 
     @Test
-
     void getJobRoles_shouldReturnListOfJobRoles_withFieldsNotNull() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode response = APP.client().target("http://localhost:8080/api/job-roles")
@@ -154,6 +153,7 @@ public class WebServiceIntegrationTest {
         Assertions.assertEquals(400, response.getStatus());
     }
 
+    @Test
     void getCompetencyPerBand_shouldReturnCompetencies_withFieldsNotNull() {
         BandCompetencies response = APP.client().target("http://localhost:8080/api/competencies/1")
                 .request()
@@ -189,4 +189,16 @@ public class WebServiceIntegrationTest {
                 .readEntity(Integer.class);
         Assertions.assertNotNull(response);
     }
+
+    @Test
+    void register_shouldReturn201_whenUserRegisters() {
+        User user = new User(3, "testtest@test.com", "password", "Admin");
+
+        Response response = APP.client().target("http://localhost:8080/api/register")
+                .request()
+                .post(Entity.entity(user, MediaType.APPLICATION_JSON_TYPE));
+
+        Assertions.assertEquals(response.getStatus(), 201);
+    }
 }
+

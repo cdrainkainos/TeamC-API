@@ -3,6 +3,7 @@ package com.kainos.ea.controller;
 import com.kainos.ea.dao.BandsDao;
 import com.kainos.ea.dao.FamilyDao;
 import com.kainos.ea.dao.RolesDao;
+import com.kainos.ea.dao.UserDao;
 import com.kainos.ea.database.DatabaseConnection;
 import com.kainos.ea.exception.*;
 import com.kainos.ea.exception.validation.UrlNotValidException;
@@ -10,11 +11,10 @@ import com.kainos.ea.model.JobRoleRequest;
 import com.kainos.ea.service.BandsService;
 import com.kainos.ea.service.FamiliesService;
 import com.kainos.ea.dao.CompetencyDao;
-import com.kainos.ea.exception.BandNotExistException;
-import com.kainos.ea.exception.DatabaseConnectionException;
-import com.kainos.ea.exception.RoleNotExistException;
-import com.kainos.ea.service.CompetencyService;
+import com.kainos.ea.model.User;
 import com.kainos.ea.service.RolesService;
+import com.kainos.ea.service.UserService;
+import com.kainos.ea.service.CompetencyService;
 import com.kainos.ea.validator.JobRoleValidator;
 import io.swagger.annotations.*;
 import org.eclipse.jetty.http.HttpStatus;
@@ -32,18 +32,21 @@ public class WebService {
     private static FamiliesService familiesService;
     private static CompetencyService competencyService;
     private static JobRoleValidator jobRoleValidator;
+    private static UserService userService;
 
     public WebService(){
         RolesDao rolesDao = new RolesDao();
         BandsDao bandsDao = new BandsDao();
         FamilyDao familyDao = new FamilyDao();
         CompetencyDao competencyDao = new CompetencyDao();
+        UserDao userDao = new UserDao();
         DatabaseConnection databaseConnector = new DatabaseConnection();
         rolesService = new RolesService(rolesDao, databaseConnector);
         bandsService = new BandsService(bandsDao, databaseConnector);
         familiesService = new FamiliesService(familyDao, databaseConnector);
         competencyService = new CompetencyService(competencyDao, databaseConnector);
         jobRoleValidator = new JobRoleValidator();
+        userService = new UserService(userDao, databaseConnector);
     }
 
     @GET
@@ -128,6 +131,7 @@ public class WebService {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500, e.getMessage()).build();
         }
     }
+
     @GET
     @Path("/competencies/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -160,6 +164,20 @@ public class WebService {
             }
         } catch (UrlNotValidException e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        }
+    }
+
+    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerUser(User user) throws DatabaseConnectionException, UserAlreadyExistsException {
+        try {
+            User user1 = userService.registerUser(user);
+            return Response.status(HttpStatus.CREATED_201).entity(user1).build();
+        } catch (Exception e) {
+            System.out.println(e);
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
 }

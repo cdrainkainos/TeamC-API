@@ -124,14 +124,12 @@ public class RolesDao {
             PreparedStatement preparedStmt = c.prepareStatement(query);
             preparedStmt.setInt(1, role_id);
             int rowsAffected = preparedStmt.executeUpdate();
-            c.close();
             if (rowsAffected != 0) {
                 return true;
             } else {
                 throw new RoleNotExistException("Role does not exist");
             }
         } catch (SQLException e) {
-            c.close();
             throw new PrepareStatementException();
         }
     }

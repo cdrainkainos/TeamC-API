@@ -21,6 +21,7 @@ public class UserService {
     }
 
     public User registerUser(User user) throws SQLException, DatabaseConnectionException, IOException, UserAlreadyExistsException {
+        databaseConnector.closeConnection();
         return userDao.registerUser(databaseConnector.getConnection(), user);
     }
 }

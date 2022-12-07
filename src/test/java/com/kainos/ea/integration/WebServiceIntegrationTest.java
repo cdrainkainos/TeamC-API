@@ -176,7 +176,7 @@ public class WebServiceIntegrationTest {
                 1,
                 1,
                 1,
-                "test role title - 2nd test",
+                "test role title",
                 "test job spec",
                 "https://kainossoftwareltd.sharepoint.com/:w:/r/engineering/_layouts/15/Doc.aspx?sourcedoc=%7B17482B35-3A5B-41A7-A55A-70F5B45E0549%7D&file=Test%20Engineer%20(A).docx&action=default&mobileredirect=true"
         );

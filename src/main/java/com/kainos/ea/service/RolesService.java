@@ -59,7 +59,9 @@ public class RolesService {
     }
 
     public boolean deleteJobRole(int role_id) throws SQLException, PrepareStatementException, RoleNotExistException, DatabaseConnectionException, IOException {
-        return rolesDao.deleteRole(databaseConnector.getConnection(), role_id);
+        boolean deleteRoleConfirmation = rolesDao.deleteRole(databaseConnector.getConnection(), role_id);
+        databaseConnector.closeConnection();
+        return deleteRoleConfirmation;
     }
 
 }

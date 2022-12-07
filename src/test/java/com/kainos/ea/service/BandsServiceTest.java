@@ -30,6 +30,7 @@ public class BandsServiceTest {
         Mockito.when(bandsDao.getAllBands(conn)).thenReturn(testList);
         List<Band> bands = bandsService.getAllBands();
         assertEquals(bands, testList);
+        databaseConnector.closeConnection();
     }
 
     @Test
@@ -37,6 +38,7 @@ public class BandsServiceTest {
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
         Mockito.when(bandsDao.getAllBands(conn)).thenThrow(SQLException.class);
         assertThrows(SQLException.class, () -> bandsService.getAllBands());
+        databaseConnector.closeConnection();
     }
 
 }

@@ -23,11 +23,16 @@ public class RolesService {
     }
 
     public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest) throws SQLException, DatabaseConnectionException, IOException {
-        return rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
+        boolean updateSuccessful = rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
+        databaseConnector.closeConnection();
+        return updateSuccessful;
+
     }
 
     public List<JobRoleResponse> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
-        return rolesDao.getAllRoles(databaseConnector.getConnection());
+        List allJobRoles = rolesDao.getAllRoles(databaseConnector.getConnection());
+        databaseConnector.closeConnection();
+        return allJobRoles;
     }
 
     public JobRoleRequest getRoleById(int roleID) throws DatabaseConnectionException, SQLException, IOException, JobRoleDoesNotExistException {
@@ -35,14 +40,19 @@ public class RolesService {
         if (Objects.isNull(jobRoleRequest)) {
             throw new JobRoleDoesNotExistException();
         }
+        databaseConnector.closeConnection();
         return jobRoleRequest;
     }
 
     public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
-        return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
+        JobSpecification allSpecifications = rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
+        databaseConnector.closeConnection();
+        return allSpecifications;
 
     }
     public int createJobRole(JobRoleRequest jobRoleReq) throws SQLException, DatabaseConnectionException, IOException {
-        return rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
+        int newJobRoleID = rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
+        databaseConnector.closeConnection();
+        return newJobRoleID;
     }
 }

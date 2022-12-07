@@ -24,10 +24,15 @@ public class DatabaseConnection {
                 Properties props = new Properties();
                 props.load(propsStream);
 
-                final String user            = props.getProperty("user");
-                final String password        = props.getProperty("password");
-                final String host            = props.getProperty("host");
-                final String db              = props.getProperty("db");
+//                final String user            = props.getProperty("user");
+//                final String password        = props.getProperty("password");
+//                final String host            = props.getProperty("host");
+//                final String db              = props.getProperty("db");
+
+                final String user            = System.getenv("user");
+                final String password        = System.getenv("password");
+                final String host            = System.getenv("host");
+                final String db              = System.getenv("db");
 
                 if (user == null || password == null || host == null || db == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
 

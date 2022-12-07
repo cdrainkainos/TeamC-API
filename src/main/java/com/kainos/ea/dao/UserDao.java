@@ -5,12 +5,13 @@ import com.kainos.ea.model.User;
 import java.sql.*;
 public class UserDao {
 
-    public User registerUser(Connection conn, User user) throws SQLException, UserAlreadyExistsException {
+    public User registerUser(Connection conn, User user) throws SQLException {
 
         User returnedUser = getUser(conn, user);
 
         if (returnedUser.getId() != 0) {
-            throw new UserAlreadyExistsException("Email already exists");
+            User nullUser = new User();
+            return nullUser;
         } else {
             String insertUserQuery = "INSERT INTO users (email, password, role)"
                     + " values (?, ?, ?)";

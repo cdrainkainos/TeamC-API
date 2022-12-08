@@ -24,16 +24,11 @@ public class RolesService {
     }
 
     public boolean updateJobRole(int roleID, JobRoleRequest jobRoleRequest) throws SQLException, DatabaseConnectionException, IOException {
-        boolean updateSuccessful = rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
-        databaseConnector.closeConnection();
-        return updateSuccessful;
-
+        return rolesDao.updateJobRole(roleID, jobRoleRequest, databaseConnector.getConnection());
     }
 
     public List<JobRoleResponse> getAllRoles() throws SQLException, DatabaseConnectionException, IOException {
-        List allJobRoles = rolesDao.getAllRoles(databaseConnector.getConnection());
-        databaseConnector.closeConnection();
-        return allJobRoles;
+        return rolesDao.getAllRoles(databaseConnector.getConnection());
     }
 
     public JobRoleRequest getRoleById(int roleID) throws DatabaseConnectionException, SQLException, IOException, JobRoleDoesNotExistException {
@@ -41,27 +36,19 @@ public class RolesService {
         if (Objects.isNull(jobRoleRequest)) {
             throw new JobRoleDoesNotExistException();
         }
-        databaseConnector.closeConnection();
         return jobRoleRequest;
     }
 
     public JobSpecification getAllSpecifications(int role_id) throws SQLException, DatabaseConnectionException, IOException, RoleNotExistException {
-        JobSpecification allSpecifications = rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
-        databaseConnector.closeConnection();
-        return allSpecifications;
-
+        return rolesDao.getAllSpecification(databaseConnector.getConnection(), role_id);
     }
 
     public int createJobRole(JobRoleRequest jobRoleReq) throws SQLException, DatabaseConnectionException, IOException {
-        int newJobRoleID = rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
-        databaseConnector.closeConnection();
-        return newJobRoleID;
+        return rolesDao.createJobRole(jobRoleReq, databaseConnector.getConnection());
     }
 
     public boolean deleteJobRole(int role_id) throws SQLException, PrepareStatementException, RoleNotExistException, DatabaseConnectionException, IOException {
-        boolean deleteRoleConfirmation = rolesDao.deleteRole(databaseConnector.getConnection(), role_id);
-        databaseConnector.closeConnection();
-        return deleteRoleConfirmation;
+        return rolesDao.deleteRole(databaseConnector.getConnection(), role_id);
     }
 
 }

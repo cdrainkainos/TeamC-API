@@ -19,8 +19,6 @@ public class BandsService {
     }
 
     public List<Band> getAllBands() throws SQLException, DatabaseConnectionException, IOException {
-        List allBands = bandsDao.getAllBands(databaseConnector.getConnection());
-        databaseConnector.closeConnection();
-        return allBands;
+        return bandsDao.getAllBands(databaseConnector.getConnection());
     }
 }

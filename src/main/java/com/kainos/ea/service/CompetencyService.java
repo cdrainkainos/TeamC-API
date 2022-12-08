@@ -19,8 +19,6 @@ public class CompetencyService {
     }
 
     public BandCompetencies getAllCompetencyPerBandLvl(int band_id) throws SQLException, DatabaseConnectionException, IOException, BandNotExistException {
-        BandCompetencies allCompetenciesPerBandLevel = competencyDao.getAllCompetencyPerBandLvl(databaseConnector.getConnection(), band_id);
-        databaseConnector.closeConnection();
-        return allCompetenciesPerBandLevel;
+        return competencyDao.getAllCompetencyPerBandLvl(databaseConnector.getConnection(), band_id);
     }
 }

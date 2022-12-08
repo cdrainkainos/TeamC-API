@@ -25,18 +25,10 @@ public class DatabaseConnection {
                 final String host            = System.getenv("DB_HOST");
                 final String db              = System.getenv("DB_NAME");
 
-                System.out.println("!! " + user);
-                System.out.println("!! " + password);
-                System.out.println("!! " + host);
-                System.out.println("!! " + db);
-
-
-
                 if (user == null || password == null || host == null || db == null)
                     throw new IllegalArgumentException(
                             "Environment variables not set.");
 
-                //conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db + "?useSSL=false", user, password);
                 conn = DriverManager.getConnection("jdbc:mysql://"
                         + host + "/" + db + "?allowPublicKeyRetrieval=true&useSSL=false", user, password);
                 return conn;
@@ -44,9 +36,7 @@ public class DatabaseConnection {
             } catch (Exception e) {
                 throw new DatabaseConnectionException(e);
             }
-
         }
-
     }
 
     public void closeConnection() throws DatabaseConnectionException {
@@ -57,7 +47,6 @@ public class DatabaseConnection {
             }
         } catch (SQLException e ) {
             throw new DatabaseConnectionException(e);
-
         }
     }
 }

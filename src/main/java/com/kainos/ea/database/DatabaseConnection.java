@@ -13,34 +13,36 @@ import java.util.Properties;
 public class DatabaseConnection {
     private static Connection conn;
 
-    public Connection getConnection() throws SQLException, DatabaseConnectionException, IOException {
+    public Connection getConnection() throws SQLException, DatabaseConnectionException {
 
-        if (conn != null) {
+        if (conn != null && !conn.isClosed()) {
             return conn;
         }
         else {
             try {
-                FileInputStream propsStream = new FileInputStream("employeedb.properties");
-                Properties props = new Properties();
-                props.load(propsStream);
+                final String user            = System.getenv("DB_USERNAME");
+                final String password        = System.getenv("DB_PASSWORD");
+                final String host            = System.getenv("DB_HOST");
+                final String db              = System.getenv("DB_NAME");
 
-                final String user            = props.getProperty("user");
-                final String password        = props.getProperty("password");
-                final String host            = props.getProperty("host");
-                final String db              = props.getProperty("db");
+                System.out.println("!! " + user);
+                System.out.println("!! " + password);
+                System.out.println("!! " + host);
+                System.out.println("!! " + db);
 
-//                final String user            = System.getenv("user");
-//                final String password        = System.getenv("password");
-//                final String host            = System.getenv("host");
-//                final String db              = System.getenv("db");
 
-                if (user == null || password == null || host == null || db == null) throw new IllegalArgumentException("Properties file must exist and must contain " + "user, password, and host properties.");
 
-                conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db + "?useSSL=false", user, password);
+                if (user == null || password == null || host == null || db == null)
+                    throw new IllegalArgumentException(
+                            "Environment variables not set.");
+
+                //conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db + "?useSSL=false", user, password);
+                conn = DriverManager.getConnection("jdbc:mysql://"
+                        + host + "/" + db + "?allowPublicKeyRetrieval=true&useSSL=false", user, password);
                 return conn;
 
-            } catch (SQLException | IOException e) {
-                throw new IOException();
+            } catch (Exception e) {
+                throw new DatabaseConnectionException(e);
             }
 
         }

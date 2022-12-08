@@ -19,8 +19,6 @@ public class FamiliesService {
     }
 
     public List<JobFamily> getAllFamilies() throws SQLException, DatabaseConnectionException, IOException {
-        List jobFamily = familyDao.getAllFamilies(databaseConnector.getConnection());
-        databaseConnector.closeConnection();
-        return jobFamily;
+        return familyDao.getAllFamilies(databaseConnector.getConnection());
     }
 }
